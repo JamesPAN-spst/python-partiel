@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 4 — Dictionnaires | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Cours 4 — Dictionnaires</h1><a href="module4-dict.html" class="quiz-link">→ Quiz (15 questions)</a></div>
+<div class="container">
+
+<h2>1. Création d'un dictionnaire</h2>
+<pre>D = {'a': 1, 'b': 2}       # syntaxe accolades
+D = dict(a=1, b=2)          # syntaxe mot-clé (clés = identifiants sans guillemets)
+D = {}                       # dict VIDE (pas un set !)</pre>
+
+<div class="warn-box"><b>⚠ Pièges de syntaxe :</b><br>
+<code>dict('a'=1)</code> → <b>SyntaxError</b> (guillemets interdits dans la syntaxe mot-clé)<br>
+<code>dict('a':1)</code> → <b>SyntaxError</b> (la syntaxe <code>clé:valeur</code> est réservée aux accolades)</div>
+
+<h3>Clés dupliquées</h3>
+<pre>{'a': 1, 'b': 2, 'a': 3}  # {'a': 3, 'b': 2}
+                            # la dernière valeur écrase la première
+len({'a':1, 'b':2, 'a':3}) # 2 (pas 3 !)</pre>
+
+<h2>2. Accès aux valeurs</h2>
+<table>
+<tr><th>Syntaxe</th><th>Comportement</th><th>Clé absente ?</th></tr>
+<tr><td><code>D[k]</code></td><td>Accès direct</td><td><b>KeyError</b></td></tr>
+<tr><td><code>D.get(k, v)</code></td><td>Accès avec valeur par défaut</td><td>Renvoie <code>v</code> (jamais d'erreur)</td></tr>
+<tr><td><code>D[k] = val</code></td><td>Ajout ou modification</td><td>Crée la clé</td></tr>
+<tr><td><code>del D[k]</code></td><td>Suppression</td><td><b>KeyError</b></td></tr>
+</table>
+
+<div class="warn-box"><b>⚠ PIÈGE :</b> <code>D[0]</code> ne renvoie PAS le « premier élément ». Un dict n'est pas indexé par position ! <code>D[0]</code> cherche la <b>clé</b> 0.</div>
+
+<div class="warn-box"><b>⚠ PIÈGE :</b> Pas de tranches (slicing) sur un dict : <code>D[2:4]</code> → <code>TypeError: unhashable type 'slice'</code></div>
+
+<h2>3. Parcours</h2>
+<pre>D = {'x': 1, 'y': 2, 'z': 3}
+
+for k in D:               # parcours des clés
+    print(k)               # x, y, z
+
+for v in D.values():       # parcours des valeurs
+    print(v)               # 1, 2, 3
+
+for k, v in D.items():     # parcours clé-valeur (le plus utile)
+    print(k, v)            # x 1, y 2, z 3</pre>
+
+<div class="tip-box"><b>✓ Raccourci :</b> <code>k in D</code> est équivalent à <code>k in D.keys()</code>. Cela teste les <b>clés</b>, PAS les valeurs.</div>
+
+<pre>'x' in D       # True  (clé existante)
+1 in D          # False (1 est une VALEUR, pas une clé)
+1 in D.values() # True</pre>
+
+<h2>4. Clés hachables</h2>
+<p>Les clés doivent être <b>immutables et hachables</b>. Quand un type mutable est nécessaire, on utilise son équivalent immutable :</p>
+<table>
+<tr><th>Type interdit</th><th>Remplacement</th></tr>
+<tr><td><code>list</code></td><td><code>tuple</code></td></tr>
+<tr><td><code>set</code></td><td><code>frozenset</code></td></tr>
+</table>
+<pre>D = {}
+D[(1, 2)] = 'ok'           # tuple → hachable ✓
+D[[1, 2]] = 'ko'           # TypeError: unhashable type 'list' ✗
+D[{1, 4}] = 'ko'           # TypeError: unhashable type 'set' ✗
+D[frozenset({1,4})] = 'ok' # frozenset → hachable ✓</pre>
+
+<h2>5. Application — Scrabble (Ex 8)</h2>
+<pre>valeurs = {'A':1,'E':1,'I':1,'L':1,'N':1,'O':1,'R':1,'S':1,'T':1,'U':1,
+           'D':2,'G':2,'M':2,'B':3,'C':3,'P':3,'F':4,'H':4,'V':4,
+           'J':8,'Q':8,'K':10,'W':10,'X':10,'Y':10,'Z':10}
+
+def score(mot):
+    return sum(valeurs[c] for c in mot.upper())
+
+score('JOYEUX')  # J(8)+O(1)+Y(10)+E(1)+U(1)+X(10) = 31</pre>
+
+<nav class="nav-bottom">
+  <a href="cours3-set.html">← Cours 3 : Ensembles</a>
+  <a href="cours5-fonctions.html">Cours 5 : Fonctions →</a>
+</nav>
+</div>
+</body>
+</html>

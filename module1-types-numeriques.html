@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 — Types numériques | AP2 Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;
+  --amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);
+  --green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;
+  --txt:#e6edf3;--txt2:#8b949e;--txt3:#6e7681;
+  --radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;
+  --body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif;
+}
+body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}
+a{color:var(--amber);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* === HEADER === */
+.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.header .back{font-size:1.4rem;opacity:.7;transition:.2s}
+.header .back:hover{opacity:1;text-decoration:none}
+.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}
+.header .badge{background:var(--amber-dim);color:var(--amber);font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:600;letter-spacing:.5px}
+.score-display{margin-left:8px;display:flex;gap:12px;font-size:.85rem;color:var(--txt2)}
+.score-display span{font-weight:700;color:var(--green)}
+.score-display .wrong{color:var(--red)}
+
+/* === LAYOUT === */
+.container{max-width:860px;margin:0 auto;padding:24px 20px 80px}
+
+/* === CHEAT SHEET DRAWER === */
+.drawer-toggle{width:100%;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 20px;color:var(--amber);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:.2s;margin-bottom:8px;font-family:var(--body-font)}
+.drawer-toggle:hover{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(245,158,11,.06));border-color:rgba(245,158,11,.35)}
+.drawer-toggle .arrow{transition:transform .3s;font-size:1.1rem}
+.drawer-toggle.open .arrow{transform:rotate(180deg)}
+.drawer-content{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--bg2);border-radius:0 0 var(--radius) var(--radius);margin-top:-8px;margin-bottom:20px}
+.drawer-content.open{max-height:3000px}
+.drawer-inner{padding:20px;font-size:.88rem;line-height:1.75;color:var(--txt2)}
+.drawer-inner h3{color:var(--amber);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(245,158,11,.15)}
+.drawer-inner h3:first-child{margin-top:0}
+.drawer-inner code{background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}
+.drawer-inner .warn{color:var(--orange);font-weight:600}
+.drawer-inner .key{color:var(--green)}
+.drawer-inner ul{padding-left:20px}
+.drawer-inner li{margin:4px 0}
+
+/* === SECTION HEADERS === */
+.section-title{font-size:1.15rem;font-weight:700;color:var(--txt);margin:32px 0 16px;padding-left:12px;border-left:3px solid var(--amber);display:flex;align-items:center;gap:10px}
+.section-title .count{font-size:.75rem;background:var(--bg3);color:var(--txt2);padding:2px 10px;border-radius:20px}
+
+/* === QUIZ CARDS === */
+.quiz-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:border-color .3s}
+.quiz-card.correct{border-color:rgba(34,197,94,.4)}
+.quiz-card.wrong{border-color:rgba(239,68,68,.4)}
+.quiz-head{padding:16px 20px 12px;display:flex;align-items:flex-start;gap:10px}
+.q-num{font-size:.7rem;font-weight:700;color:var(--bg);background:var(--amber);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.q-num.done-right{background:var(--green)}
+.q-num.done-wrong{background:var(--red)}
+.q-text{font-size:.92rem;flex:1}
+.q-text code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}
+.diff-tag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.diff-tag.easy{background:rgba(34,197,94,.15);color:var(--green)}
+.diff-tag.medium{background:rgba(249,115,22,.15);color:var(--orange)}
+.diff-tag.hard{background:rgba(239,68,68,.15);color:var(--red)}
+
+/* === CODE BLOCK in question === */
+.code-block{background:var(--bg);border-radius:6px;padding:12px 16px;margin:10px 20px 4px;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan);overflow-x:auto;white-space:pre;border:1px solid var(--bg3)}
+
+/* === OPTIONS === */
+.options{padding:4px 20px 16px}
+.opt-btn{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;margin:6px 0;color:var(--txt);font-size:.88rem;cursor:pointer;transition:.2s;font-family:var(--body-font);line-height:1.5}
+.opt-btn:hover:not(.locked){background:var(--bg4);border-color:rgba(245,158,11,.3)}
+.opt-btn code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}
+.opt-btn.selected-right{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}
+.opt-btn.selected-wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}
+.opt-btn.reveal-right{border-color:rgba(34,197,94,.3);color:var(--green)}
+.opt-btn.locked{cursor:default;opacity:.85}
+
+/* === INPUT ANSWER === */
+.input-area{padding:4px 20px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.input-area input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;color:var(--txt);font-family:var(--code-font);font-size:.88rem;outline:none;transition:.2s}
+.input-area input:focus{border-color:var(--amber)}
+.input-area input.right{border-color:var(--green);color:var(--green)}
+.input-area input.wrong-input{border-color:var(--red);color:var(--red)}
+.submit-btn{background:var(--amber);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:var(--body-font);transition:.2s}
+.submit-btn:hover{background:var(--amber2)}
+.submit-btn:disabled{opacity:.4;cursor:default}
+
+/* === EXPLANATION === */
+.explanation{padding:0 20px 16px;display:none}
+.explanation.show{display:block}
+.expl-box{background:rgba(245,158,11,.06);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.85rem;color:var(--txt2);line-height:1.7}
+.expl-box code{background:var(--bg);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.8rem;color:var(--cyan)}
+.expl-box .formula{color:var(--amber);font-weight:600}
+
+/* === FOOTER BAR === */
+.footer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--bg3);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:20px;z-index:100}
+.footer-bar .progress-text{font-size:.85rem;color:var(--txt2)}
+.footer-bar .progress-text b{color:var(--amber)}
+.progress-bar-bg{flex:1;max-width:300px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--amber);border-radius:3px;transition:width .4s}
+.retry-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s;display:none}
+.retry-btn:hover{background:rgba(239,68,68,.1)}
+.retry-btn.show{display:block}
+.reset-btn{background:transparent;border:1px solid var(--txt3,#6e7681);color:var(--txt2);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(139,148,158,.1);border-color:var(--txt2)}
+.reset-one-wrap{padding:0 20px 14px}
+.reset-one-btn{background:transparent;border:1px dashed var(--txt3,#6e7681);color:var(--txt2);border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:var(--body-font);transition:.2s}
+.reset-one-btn:hover{border-color:var(--amber);color:var(--amber);border-style:solid}
+
+/* === RESPONSIVE === */
+@media(max-width:600px){
+  .header{padding:12px 16px;gap:10px}
+  .header h1{font-size:.95rem}
+  .container{padding:16px 12px 80px}
+  .quiz-head{padding:14px 14px 10px}
+  .options,.input-area,.explanation{padding-left:14px;padding-right:14px}
+  .code-block{margin-left:14px;margin-right:14px;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back">←</a>
+  <h1>Module 1 — Types numériques</h1>
+  <span class="badge">INT · FLOAT · COMPLEX</span>
+  <a href="cours1-types-numeriques.html" style="margin-left:auto;background:rgba(167,139,250,.15);color:#a78bfa;padding:5px 14px;border-radius:7px;font-size:.78rem;font-weight:600;border:1px solid rgba(167,139,250,.2);text-decoration:none">📚 Cours</a>
+  <div class="score-display">
+    <div>✓ <span id="scoreRight">0</span></div>
+    <div>✗ <span id="scoreWrong" class="wrong">0</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== ANTISÈCHE ===== -->
+<button class="drawer-toggle" onclick="toggleDrawer(this)">
+  📋 Antisèche — Types numériques <span class="arrow">▼</span>
+</button>
+<div class="drawer-content" id="cheatsheet">
+<div class="drawer-inner">
+
+<h3>int — Entiers à précision arbitraire</h3>
+<ul>
+  <li>Bases : <code>0b101</code> (bin), <code>0o17</code> (oct), <code>0x1f</code> (hex)</li>
+  <li>Conversions : <code>bin()</code>, <code>oct()</code>, <code>hex()</code> → renvoient des <b>chaînes</b></li>
+  <li><code>int('ff', 16)</code> → 255 &nbsp;|&nbsp; <code>int('111', 2)</code> → 7</li>
+  <li>Pas de limite de taille : <code>math.factorial(1000)</code> fonctionne</li>
+</ul>
+
+<h3>float — IEEE 754 double précision</h3>
+<ul>
+  <li>64 bits : 1 signe + 11 exposant + 52 mantisse → ~16 chiffres significatifs</li>
+  <li class="warn">⚠ PIÈGE : troncature vs plancher</li>
+  <li><code>int(-3.7)</code> = <code>-3</code> (vers zéro) &nbsp;≠&nbsp; <code>math.floor(-3.7)</code> = <code>-4</code> (vers −∞)</li>
+  <li class="warn">⚠ PIÈGE : perte de précision</li>
+  <li><code>1 + 1e-16 - 1</code> == <code>0.0</code> (pas 1e-16 !)</li>
+  <li><span class="key">Epsilon machine</span> : y = 2<sup>−52</sup> ≈ 2.22 × 10<sup>−16</sup>, plus petit 2<sup>k</sup> tel que 1 + y ≠ 1</li>
+  <li><span class="key">Seuil entier</span> : x = 2<sup>53</sup> ≈ 9 × 10<sup>15</sup>, plus petit 2<sup>k</sup> tel que x + 1 == x</li>
+  <li>Relation : x × y = 1</li>
+  <li><code>float('inf')</code>, <code>1e308 * 10</code> → <code>inf</code></li>
+  <li>Arrondi : <code>round()</code> (plus proche, règle du banker), <code>math.ceil()</code> (vers +∞)</li>
+</ul>
+
+<h3>complex — Nombres complexes</h3>
+<ul>
+  <li>Littéral : suffixe <code>j</code> → <code>3+4j</code>, <code>2j</code></li>
+  <li>Attributs : <code>z.real</code>, <code>z.imag</code> (pas de parenthèses, pas de fonction globale !)</li>
+  <li class="warn">⚠ PIÈGE : <code>real(z)</code> n'existe PAS → <code>z.real</code></li>
+  <li><code>abs(z)</code> = module |z| &nbsp;|&nbsp; <code>cmath.phase(z)</code> = argument</li>
+  <li><code>z**0.5</code> = racine carrée complexe</li>
+  <li>Euler : <code>cmath.exp(1j * math.pi)</code> ≈ −1</li>
+</ul>
+
+<h3>Racine carrée entière (dichotomie)</h3>
+<ul>
+  <li><code>int(n**0.5)</code> : <span class="warn">FAUX pour grands n</span> (n = 3<sup>100</sup> → erreur d'arrondi)</li>
+  <li>Pour n = 3<sup>1000</sup> : <code>OverflowError</code> (pas convertible en float)</li>
+  <li>Version correcte : dichotomie sur [0, n], complexité O(log n)</li>
+</ul>
+
+</div>
+</div>
+
+<!-- ===== QUESTIONS ===== -->
+<div class="section-title">🧠 Quiz <span class="count" id="progressText">0 / 20</span></div>
+
+<div id="quizContainer"></div>
+
+</div>
+
+<div class="footer-bar">
+  <span class="progress-text"><b id="footProg">0</b> / <b id="footTotal">20</b></span>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar" style="width:0%"></div></div>
+  <button class="retry-btn" id="retryBtn" onclick="retryWrong()">🔄 Réessayer les erreurs</button>
+  <button class="reset-btn" onclick="resetAll()">🗑️ Tout réinitialiser</button>
+</div>
+
+<script>
+// ============================================================
+//  QUESTION DATA
+// ============================================================
+const questions = [
+  // --- BLOCK 1: int ---
+  {
+    id:1, type:"mcq", diff:"easy",
+    text:"Que renvoie <code>bin(7)</code> ?",
+    options:[
+      "<code>'111'</code>",
+      "<code>'0b111'</code>",
+      "<code>111</code>",
+      "<code>0b111</code>"
+    ],
+    answer:1,
+    explanation:"<code>bin()</code> renvoie une <b>chaîne</b> avec le préfixe <code>0b</code>. Donc <code>bin(7)</code> = <code>'0b111'</code>."
+  },
+  {
+    id:2, type:"input", diff:"medium",
+    text:"Que renvoie l\u2019expression <code>bin(7) + str(0b11)</code> ?<br><small>Répondez avec les guillemets, ex: <code>'abc'</code></small>",
+    answer:"'0b1113'",
+    accept:["'0b1113'","\"0b1113\"","0b1113"],
+    explanation:"<code>bin(7)</code> = <code>'0b111'</code> (str), <code>0b11</code> = 3 (int), <code>str(3)</code> = <code>'3'</code>. Concaténation : <code>'0b111' + '3'</code> = <code>'0b1113'</code>."
+  },
+  {
+    id:3, type:"input", diff:"easy",
+    text:"Que vaut <code>int('11') - 0b11</code> ?",
+    answer:"8",
+    accept:["8"],
+    explanation:"<code>int('11')</code> = 11 (base 10). <code>0b11</code> = 3. Donc 11 − 3 = <b>8</b>."
+  },
+  // --- BLOCK 2: float arrondi ---
+  {
+    id:4, type:"mcq", diff:"medium",
+    text:"Que vaut <code>int(1.1) - int(-1.1)</code> ?",
+    options:["<code>0</code>","<code>1</code>","<code>2</code>","<code>3</code>"],
+    answer:2,
+    explanation:"<code>int()</code> tronque vers zéro : <code>int(1.1)</code> = 1, <code>int(-1.1)</code> = −1. Donc 1 − (−1) = <b>2</b>."
+  },
+  {
+    id:5, type:"input", diff:"hard",
+    text:"Que vaut <code>math.floor(-2.1) - int(-2.1)</code> ?",
+    answer:"-1",
+    accept:["-1"],
+    explanation:"<code>math.floor(-2.1)</code> = −3 (vers −∞), <code>int(-2.1)</code> = −2 (vers 0). Donc −3 − (−2) = <b>−1</b>. C\u2019est LE piège classique !"
+  },
+  {
+    id:6, type:"mcq", diff:"medium",
+    text:"Parmi ces expressions, laquelle vaut <code>-4</code> ?",
+    options:[
+      "<code>int(-3.7)</code>",
+      "<code>math.floor(-3.7)</code>",
+      "<code>round(-3.7)</code>",
+      "<code>math.ceil(-3.7)</code>"
+    ],
+    answer:1,
+    explanation:"<code>int(-3.7)</code> = −3 (vers 0), <code class='formula'>math.floor(-3.7) = −4</code> (vers −∞), <code>round(-3.7)</code> = −4, <code>math.ceil(-3.7)</code> = −3 (vers +∞). Attention : <code>round</code> aussi donne −4 ici, mais la réponse attendue est <code>floor</code>. En fait <code>round(-3.7)</code> = −4 aussi ! Les deux sont valides, mais <code>floor</code> est la réponse la plus directe."
+  },
+  // --- BLOCK 3: float precision ---
+  {
+    id:7, type:"mcq", diff:"hard",
+    text:"Que vaut <code>1 + 1e-16 - 1</code> en Python ?",
+    options:[
+      "<code>1e-16</code>",
+      "<code>0.0</code>",
+      "<code>1.1102230246251565e-16</code>",
+      "<code>OverflowError</code>"
+    ],
+    answer:1,
+    explanation:"L\u2019epsilon machine est ≈ 2.22 × 10<sup>−16</sup>. Comme 10<sup>−16</sup> < epsilon/2, l\u2019addition <code>1 + 1e-16</code> est arrondie à <code>1.0</code> exactement. Donc <code>1.0 - 1</code> = <code>0.0</code>."
+  },
+  {
+    id:8, type:"input", diff:"hard",
+    text:"Quel est le plus petit entier k ≥ 0 tel que <code>float(2**k + 1) == float(2**k)</code> ?",
+    answer:"53",
+    accept:["53"],
+    explanation:"La mantisse IEEE 754 a 52 bits. 2<sup>53</sup> est exactement représentable, mais 2<sup>53</sup> + 1 ne l\u2019est pas. Donc k = <b>53</b>."
+  },
+  {
+    id:9, type:"mcq", diff:"medium",
+    text:"Que se passe-t-il avec <code>int(3**1000 ** 0.5)</code> ?",
+    options:[
+      "Renvoie la racine carrée entière correcte",
+      "Renvoie une valeur incorrecte (arrondi float)",
+      "<code>OverflowError</code>",
+      "<code>ValueError</code>"
+    ],
+    answer:2,
+    explanation:"3<sup>1000</sup> est trop grand pour être converti en float (max ≈ 1.8 × 10<sup>308</sup>). Python lève <code>OverflowError</code>. Il faut utiliser la dichotomie."
+  },
+  // --- BLOCK 4: complex ---
+  {
+    id:10, type:"mcq", diff:"easy",
+    text:"Comment obtenir la partie réelle d\u2019un complexe <code>z = 3+4j</code> ?",
+    options:[
+      "<code>real(z)</code>",
+      "<code>z.real()</code>",
+      "<code>z.real</code>",
+      "<code>Re(z)</code>"
+    ],
+    answer:2,
+    explanation:"<code>z.real</code> est un <b>attribut</b>, pas une méthode ni une fonction globale. <code>real(z)</code> et <code>Re(z)</code> n\u2019existent pas. <code>z.real()</code> avec parenthèses donnerait <code>TypeError</code> car float n\u2019est pas callable."
+  },
+  {
+    id:11, type:"input", diff:"medium",
+    text:"Si <code>j = 1</code> (variable), que vaut <code>(1+2j)**2</code> ?<br><small>Format : <code>a+bj</code> ou <code>(-a+bj)</code></small>",
+    answer:"(-3+4j)",
+    accept:["(-3+4j)","-3+4j","(-3.0+4.0j)","(-3+4.0j)"],
+    explanation:"<code>2j</code> est un littéral complexe (indépendant de la variable j). <code>(1+2j)<sup>2</sup></code> = 1 + 4j + 4j<sup>2</sup> = 1 + 4j − 4 = <b>−3 + 4j</b>."
+  },
+  {
+    id:12, type:"input", diff:"medium",
+    text:"Que vaut <code>abs((1j - 1)**2)</code> ?",
+    answer:"2",
+    accept:["2","2.0","2.0000000000000004"],
+    explanation:"<code>1j − 1</code> = −1 + j. Au carré : (−1+j)<sup>2</sup> = 1 − 2j + j<sup>2</sup> = 1 − 2j − 1 = −2j. <code>abs(-2j)</code> = |−2j| = <b>2</b>."
+  },
+  // --- BLOCK 5: int(n**0.5) pitfall ---
+  {
+    id:13, type:"mcq", diff:"hard",
+    text:"Pour <code>n = 3**100</code>, que fait <code>int(n**0.5)</code> ?",
+    options:[
+      "Renvoie exactement 3<sup>50</sup>",
+      "Renvoie une valeur incorrecte (arrondi)",
+      "<code>OverflowError</code>",
+      "<code>ValueError</code>"
+    ],
+    answer:1,
+    explanation:"3<sup>100</sup> tient en float (≈ 5.15 × 10<sup>47</sup>), mais la racine carrée perd en précision. Le résultat <code>int(n**0.5)</code> peut différer de 3<sup>50</sup>. Pour 3<sup>1000</sup> c\u2019est encore pire : <code>OverflowError</code>."
+  },
+  {
+    id:14, type:"mcq", diff:"medium",
+    text:"Quelle est la bonne dichotomie pour la racine carrée entière de n ?",
+    options:[
+      "<code>a, b = 0, n<br>while b-a > 1: m=(a+b)//2; if m*m<=n: a=m else: b=m</code>",
+      "<code>a, b = 1, n<br>while a < b: m=(a+b)//2; if m*m==n: return m else: a=m+1</code>",
+      "<code>a, b = 0, n<br>while a != b: m=(a+b)//2; if m*m<n: a=m+1 else: b=m</code>",
+      "Toutes sont correctes"
+    ],
+    answer:0,
+    explanation:"La version correcte initialise <code>a=0, b=n</code> et maintient l\u2019invariant <code>a\u00b2 \u2264 n < b\u00b2</code> (implicitement). La condition <code>b-a > 1</code> garantit la terminaison, et <code>//2</code> assure un calcul entier."
+  },
+  // --- BLOCK 6: Mixed ---
+  {
+    id:15, type:"tf", diff:"easy",
+    text:"<code>type(0b1010)</code> renvoie <code>&lt;class 'bin'&gt;</code>.",
+    answer:false,
+    explanation:"<code>0b1010</code> est un <b>int</b> écrit en binaire. <code>type(0b1010)</code> → <code>&lt;class 'int'&gt;</code>. Le préfixe <code>0b</code> n\u2019est qu\u2019une notation."
+  },
+  {
+    id:16, type:"tf", diff:"easy",
+    text:"<code>hex(255)</code> renvoie <code>'0xff'</code>.",
+    answer:true,
+    explanation:"<code>hex(255)</code> renvoie bien la chaîne <code>'0xff'</code>."
+  },
+  {
+    id:17, type:"tf", diff:"medium",
+    text:"<code>int(3.9999999999999996)</code> vaut <code>4</code>.",
+    answer:true,
+    explanation:"En IEEE 754, <code>3.9999999999999996</code> est arrondi à <code>4.0</code> exactement. Donc <code>int(4.0)</code> = 4. La précision float joue des tours !"
+  },
+  {
+    id:18, type:"input", diff:"medium",
+    text:"Après <code>x=[5,3,1]; del x[1]</code>, puis <code>x.pop()</code>, que vaut <code>x</code> ?<br><small>Format liste Python, ex: <code>[1,2]</code></small>",
+    answer:"[5]",
+    accept:["[5]"],
+    explanation:"<code>del x[1]</code> supprime l\u2019élément d\u2019indice 1 → <code>[5,1]</code>. <code>x.pop()</code> retire le dernier → renvoie 1, <code>x = [5]</code>."
+  },
+  {
+    id:19, type:"input", diff:"hard",
+    text:"Que vaut <code>sorted((2,)*3 + (1,)*2)[1:3]</code> ?<br><small>Format liste Python</small>",
+    answer:"[1, 2]",
+    accept:["[1, 2]","[1,2]"],
+    explanation:"<code>(2,)*3 + (1,)*2</code> = <code>(2,2,2,1,1)</code>. <code>sorted(...)</code> = <code>[1,1,2,2,2]</code>. Tranche <code>[1:3]</code> = <code>[1, 2]</code>."
+  },
+  {
+    id:20, type:"mcq", diff:"hard",
+    text:"On définit :<div class='code-block'>import math\nx = 2**52\nprint(float(x) == float(x+1))\nprint(float(2*x) == float(2*x+1))</div>Qu\u2019affiche ce code ?",
+    options:[
+      "<code>False</code> puis <code>False</code>",
+      "<code>False</code> puis <code>True</code>",
+      "<code>True</code> puis <code>True</code>",
+      "<code>True</code> puis <code>False</code>"
+    ],
+    answer:1,
+    explanation:"2<sup>52</sup> et 2<sup>52</sup>+1 sont tous deux représentables exactement (mantisse 52 bits + bit implicite). Donc <code>False</code>. Mais 2<sup>53</sup> = 2×2<sup>52</sup> est représentable tandis que 2<sup>53</sup>+1 ne l\u2019est pas → arrondi à 2<sup>53</sup>. Donc <code>True</code>."
+  }
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+const STORAGE_KEY = "ap2_mod1_state";
+let state = loadState();
+
+function loadState(){
+  try{
+    const s = localStorage.getItem(STORAGE_KEY);
+    if(s) return JSON.parse(s);
+  }catch(e){}
+  return {answered:{}, right:0, wrong:0};
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}catch(e){}
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function render(onlyIds){
+  const container = document.getElementById("quizContainer");
+  if(!onlyIds) container.innerHTML = "";
+  const qs = onlyIds ? questions.filter(q=>onlyIds.includes(q.id)) : questions;
+
+  qs.forEach(q=>{
+    const card = document.createElement("div");
+    card.className = "quiz-card";
+    card.id = "card-"+q.id;
+    const answered = state.answered[q.id];
+    if(answered !== undefined){
+      card.classList.add(answered ? "correct" : "wrong");
+    }
+
+    let numClass = "q-num";
+    if(answered === true) numClass += " done-right";
+    else if(answered === false) numClass += " done-wrong";
+
+    const diffClass = q.diff;
+    const diffLabel = q.diff === "easy" ? "Facile" : q.diff === "medium" ? "Moyen" : "Difficile";
+
+    let html = `<div class="quiz-head">
+      <div class="${numClass}">${q.id}</div>
+      <div class="q-text">${q.text}</div>
+      <span class="diff-tag ${diffClass}">${diffLabel}</span>
+    </div>`;
+
+    if(q.type === "mcq"){
+      html += `<div class="options" id="opts-${q.id}">`;
+      q.options.forEach((opt, i)=>{
+        let cls = "opt-btn";
+        if(answered !== undefined){
+          cls += " locked";
+          if(i === q.answer) cls += " reveal-right";
+          if(answered === false && state.answered[q.id+"_pick"] === i) cls += " selected-wrong";
+          if(answered === true && i === q.answer) cls = "opt-btn locked selected-right";
+        }
+        html += `<button class="${cls}" ${answered !== undefined ? 'disabled' : ''} onclick="pickMCQ(${q.id},${i})">${opt}</button>`;
+      });
+      html += `</div>`;
+    } else if(q.type === "tf"){
+      html += `<div class="options" id="opts-${q.id}">`;
+      ["Vrai","Faux"].forEach((label, i)=>{
+        const val = i === 0;
+        let cls = "opt-btn";
+        if(answered !== undefined){
+          cls += " locked";
+          if(val === q.answer) cls += " reveal-right";
+          if(answered === false && state.answered[q.id+"_pick"] === val) cls += " selected-wrong";
+          if(answered === true && val === q.answer) cls = "opt-btn locked selected-right";
+        }
+        html += `<button class="${cls}" ${answered !== undefined ? 'disabled' : ''} onclick="pickTF(${q.id},${val})">${label}</button>`;
+      });
+      html += `</div>`;
+    } else if(q.type === "input"){
+      const locked = answered !== undefined;
+      const inputCls = answered === true ? "right" : answered === false ? "wrong-input" : "";
+      html += `<div class="input-area">
+        <input type="text" id="inp-${q.id}" class="${inputCls}" placeholder="Votre réponse..." ${locked?'disabled':''} ${locked?`value="${state.answered[q.id+'_val']||''}"`:''} onkeydown="if(event.key==='Enter')submitInput(${q.id})">
+        <button class="submit-btn" ${locked?'disabled':''} onclick="submitInput(${q.id})">Valider</button>
+      </div>`;
+    }
+
+    html += `<div class="explanation ${answered !== undefined ? 'show' : ''}" id="expl-${q.id}">
+      <div class="expl-box">${q.explanation}</div>
+    </div>`;
+
+    card.innerHTML = html;
+    if(onlyIds){
+      const old = document.getElementById("card-"+q.id);
+      if(old) old.replaceWith(card);
+    } else {
+      container.appendChild(card);
+    }
+  });
+
+  updateProgress();
+}
+
+// ============================================================
+//  INTERACTIONS
+// ============================================================
+function pickMCQ(id, pick){
+  const q = questions.find(x=>x.id===id);
+  const correct = pick === q.answer;
+  recordAnswer(id, correct, {pick});
+}
+
+function pickTF(id, pick){
+  const q = questions.find(x=>x.id===id);
+  const correct = pick === q.answer;
+  recordAnswer(id, correct, {pick});
+}
+
+function submitInput(id){
+  const inp = document.getElementById("inp-"+id);
+  if(!inp || !inp.value.trim()) return;
+  const q = questions.find(x=>x.id===id);
+  const val = inp.value.trim();
+  const correct = q.accept ? q.accept.some(a => a.toLowerCase() === val.toLowerCase()) : val.toLowerCase() === q.answer.toLowerCase();
+  recordAnswer(id, correct, {val});
+}
+
+function recordAnswer(id, correct, extra){
+  if(state.answered[id] !== undefined) return;
+  state.answered[id] = correct;
+  if(extra.pick !== undefined) state.answered[id+"_pick"] = extra.pick;
+  if(extra.val !== undefined) state.answered[id+"_val"] = extra.val;
+  if(correct) state.right++; else state.wrong++;
+  saveState();
+  render([id]);
+}
+
+function updateProgress(){
+  const total = questions.length;
+  const done = Object.keys(state.answered).filter(k=>!k.includes("_")).length;
+  document.getElementById("scoreRight").textContent = state.right;
+  document.getElementById("scoreWrong").textContent = state.wrong;
+  document.getElementById("progressText").textContent = done + " / " + total;
+  document.getElementById("footProg").textContent = done;
+  document.getElementById("footTotal").textContent = total;
+  document.getElementById("progBar").style.width = (done/total*100)+"%";
+  const retryBtn = document.getElementById("retryBtn");
+  if(state.wrong > 0 && done === total) retryBtn.classList.add("show");
+  else retryBtn.classList.remove("show");
+}
+
+function retryWrong(){
+  const wrongIds = questions.filter(q=>state.answered[q.id]===false).map(q=>q.id);
+  wrongIds.forEach(id=>{
+    delete state.answered[id];
+    delete state.answered[id+"_pick"];
+    delete state.answered[id+"_val"];
+  });
+  state.wrong = 0;
+  // recount right
+  state.right = questions.filter(q=>state.answered[q.id]===true).length;
+  saveState();
+  render();
+}
+
+// ============================================================
+//  DRAWER
+// ============================================================
+function resetAll(){
+  if(!confirm('Réinitialiser TOUTES les réponses de ce module ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = {answered:{}, right:0, wrong:0};
+  render();
+}
+
+function toggleDrawer(btn){
+  btn.classList.toggle("open");
+  document.getElementById("cheatsheet").classList.toggle("open");
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+render();
+</script>
+</body>
+</html>

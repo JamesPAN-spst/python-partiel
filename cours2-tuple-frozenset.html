@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 2 — Tuple & Frozenset | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700;transition:.2s}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}tr:hover td{background:rgba(245,158,11,.03)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem;padding:12px}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Cours 2 — Tuple & Frozenset</h1><a href="module2-tuple-frozenset.html" class="quiz-link">→ Quiz (15 questions)</a></div>
+<div class="container">
+
+<h2>1. tuple — Séquence immutable ordonnée</h2>
+<p>Un tuple est une collection <b>ordonnée</b>, <b>immutable</b> et <b>hétérogène</b> (types différents autorisés).</p>
+
+<pre>t = (1, 'hello', 3.14)    # tuple à 3 éléments
+t[0]                        # 1 (indexation)
+t[1:]                       # ('hello', 3.14) (slicing)
+len(t)                      # 3</pre>
+
+<div class="warn-box"><b>⚠ PIÈGE MAJEUR — Tuple à 1 élément :</b><br>
+<code>(1)</code> est un <b>int</b> (parenthèses = groupement mathématique)<br>
+<code>(1,)</code> est un <b>tuple</b> à 1 élément (la virgule fait le tuple !)<br>
+<code>()</code> est un tuple <b>vide</b></div>
+
+<h3>Immutabilité</h3>
+<p>On ne peut ni modifier, ni ajouter, ni supprimer un élément :</p>
+<pre>t = (1, 2, 3)
+t[0] = 10       # TypeError !
+t.append(4)     # AttributeError !
+del t[0]        # TypeError !</pre>
+
+<h3>Opérations autorisées</h3>
+<pre>(1, 2) + (3, 4)     # (1, 2, 3, 4)  concaténation
+(2,) * 3             # (2, 2, 2)      répétition
+3 in (1, 2, 3)       # True           appartenance</pre>
+
+<h3>Déballage (unpacking)</h3>
+<pre>a, b, c = (1, 2, 3)        # a=1, b=2, c=3
+a, *b, c = (1, 2, 3, 4, 5) # a=1, b=[2,3,4], c=5
+                            # *b capture le reste dans une LISTE</pre>
+
+<div class="info-box"><b>ℹ Note :</b> Le déballage étendu <code>*b</code> crée toujours une <b>liste</b>, même en déballant un tuple.</div>
+
+<h3>Hachabilité</h3>
+<p>Un tuple est <b>hachable si et seulement si tous ses éléments sont hachables</b> :</p>
+<pre>(1, 2, 'a')       # hachable → peut être clé de dict
+(1, [2, 3])        # NON hachable → TypeError si utilisé comme clé
+                   # car [2,3] est une liste (mutable)</pre>
+
+<h2>2. zip et enumerate</h2>
+
+<h3>zip — Assembler des séquences en parallèle</h3>
+<pre>list(zip([1,2,3], 'abc'))
+# [(1,'a'), (2,'b'), (3,'c')]
+
+list(zip([1,2,3], 'ab'))
+# [(1,'a'), (2,'b')]  → s'arrête au plus court !</pre>
+
+<div class="warn-box"><b>⚠ :</b> <code>zip()</code> renvoie un <b>itérateur</b>, pas une liste. <code>len(zip(...))</code> → <code>TypeError</code>. Il faut <code>len(list(zip(...)))</code>.</div>
+
+<h3>enumerate — Indices + valeurs</h3>
+<pre>list(enumerate('abc'))
+# [(0,'a'), (1,'b'), (2,'c')]   ordre : (indice, valeur)</pre>
+
+<h2>3. frozenset — Ensemble immutable</h2>
+<p>Un <code>frozenset</code> est la version <b>immutable</b> de <code>set</code>. Il est <b>hachable</b>, donc utilisable comme clé de dict ou élément de set.</p>
+
+<pre>fs = frozenset({1, 2, 3})
+fs.add(4)           # AttributeError ! (immutable)
+fs.remove(1)        # AttributeError !</pre>
+
+<h3>Opérateurs ensemblistes</h3>
+<p>Les opérateurs <code>&</code>, <code>|</code>, <code>-</code> fonctionnent entre frozenset et set :</p>
+<pre>frozenset({1,2}) & {2,3}   # frozenset({2})  — type de l'opérande gauche
+{2,3} & frozenset({1,2})    # {2}             — type de l'opérande gauche</pre>
+
+<h3>Cas d'usage principal</h3>
+<pre># Ensemble contenant un ensemble ? Impossible avec set :
+{1, {2, 3}}                 # TypeError: unhashable type 'set'
+
+# Solution avec frozenset :
+{1, frozenset({2, 3})}      # OK !</pre>
+
+<nav class="nav-bottom">
+  <a href="cours1-types-numeriques.html">← Cours 1 : Types numériques</a>
+  <a href="cours3-set.html">Cours 3 : Ensembles →</a>
+</nav>
+</div>
+</body>
+</html>

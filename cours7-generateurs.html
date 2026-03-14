@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 7 — Générateurs | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Cours 7 — Générateurs</h1><a href="module7-generateurs.html" class="quiz-link">→ Quiz (18 questions)</a></div>
+<div class="container">
+
+<h2>1. Itérables et range</h2>
+<p><code>range(10**30)</code> ne crée PAS une liste de 10³⁰ éléments. C'est un <b>itérable paresseux</b> : il génère les valeurs à la demande, sans les stocker en mémoire.</p>
+
+<pre>a = range(10**8)     # itérable (prend 48 octets)
+sum(a)               # fonctionne → 4999999950000000
+b = list(a)          # liste (prend 1 Go !)
+c = list(range(10**9))  # Killed (mémoire insuffisante)</pre>
+
+<h2>2. Expressions génératrices vs compréhensions de liste</h2>
+
+<table>
+<tr><th>Syntaxe</th><th>Type</th><th>Mémoire</th></tr>
+<tr><td><code>[x**2 for x in range(N)]</code></td><td><code>list</code></td><td>Tout en mémoire</td></tr>
+<tr><td><code>(x**2 for x in range(N))</code></td><td><code>generator</code></td><td>Une valeur à la fois</td></tr>
+</table>
+
+<pre>sum(x**2 for x in range(10**9))      # OK (expression génératrice)
+sum([x**2 for x in range(10**9)])     # Killed (liste trop grande)</pre>
+
+<div class="warn-box"><b>⚠ PIÈGE DE TYPES — Questions fréquentes au partiel :</b>
+
+<table>
+<tr><th>Expression</th><th>Type</th><th>Pourquoi</th></tr>
+<tr><td><code>[1/a for a in range(1,10)]</code></td><td>list</td><td>Crochets = liste</td></tr>
+<tr><td><code>(1/a for a in range(1,10))</code></td><td>generator</td><td>Parenthèses + for = générateur</td></tr>
+<tr><td><code>[(1/a for a in range(1,10))]</code></td><td>list (d'un generator)</td><td>Crochets créent liste avec 1 élément : le générateur</td></tr>
+<tr><td><code>(sum(1/a for a in range(1,10)),)</code></td><td>tuple</td><td>La <b>virgule</b> crée le tuple !</td></tr>
+<tr><td><code>(1/sum(a for a in range(1,10)))</code></td><td>float</td><td>Pas de virgule → parenthèses = groupement</td></tr>
+</table>
+</div>
+
+<h2>3. Fonctions génératrices (yield)</h2>
+<p>Une fonction avec <code>yield</code> (au lieu de <code>return</code>) crée un <b>générateur</b>. Chaque <code>yield</code> produit une valeur et <b>suspend</b> l'exécution.</p>
+
+<pre>def f(a):
+    yield a
+    yield a * 2
+    yield a + 1
+
+list(f(10))     # [10, 20, 11]
+
+# Équivalent avec boucle :
+def carres(n):
+    for x in range(1, n+1):
+        yield x ** 2
+
+list(carres(5))  # [1, 4, 9, 16, 25]</pre>
+
+<div class="warn-box"><b>⚠ Épuisement :</b> Un générateur ne peut être consommé qu'<b>une seule fois</b> !
+<pre>g = (x**2 for x in range(5))
+list(g)    # [0, 1, 4, 9, 16]
+list(g)    # []  ← épuisé !</pre></div>
+
+<h3>Épuisement partiel</h3>
+<pre>g = (x**2 for x in range(10))
+for i in g:
+    if i == 9: break     # consomme x=0,1,2,3 puis s'arrête
+list(g)    # [16, 25, 36, 49, 64, 81]  ← le reste</pre>
+
+<h2>4. Générateurs récursifs</h2>
+
+<h3>Sous-ensembles</h3>
+<pre>def sous_ensembles(A):
+    if len(A) == 0:
+        yield set()
+    else:
+        x = A.pop()
+        for B in sous_ensembles(A):
+            yield B
+            yield B | {x}
+
+list(sous_ensembles({1,2,3}))
+# [set(), {1}, {2}, {1,2}, {3}, {1,3}, {2,3}, {1,2,3}]</pre>
+
+<h3>Permutations</h3>
+<pre>def permutations(T):
+    if len(T) == 1:
+        yield T
+    else:
+        for t in permutations(T[1:]):
+            for i in range(len(T)):
+                yield t[:i] + T[:1] + t[i:]</pre>
+
+<h2>5. Le module itertools</h2>
+
+<pre>from itertools import permutations, combinations, product
+
+# Permutations
+list(permutations('abc'))
+# [('a','b','c'), ('a','c','b'), ('b','a','c'), ...]  → 6
+
+# Arrangements (k éléments parmi n)
+list(permutations('abc', 2))
+# [('a','b'), ('a','c'), ('b','a'), ('b','c'), ('c','a'), ('c','b')]
+
+# Combinaisons
+list(combinations('abc', 2))
+# [('a','b'), ('a','c'), ('b','c')]  → 3
+
+# Produit cartésien
+list(product((0,1), repeat=4))     # 16 tuples (tous les mots binaires de longueur 4)
+
+# Simuler des boucles imbriquées
+for i, j, k in product((1,3,9), range(20), 'abcd'):
+    ...  # équivaut à 3 boucles for imbriquées</pre>
+
+<h3>Applications classiques</h3>
+<pre># Combien de façons d'écrire 37 = somme de 5 entiers > 0 ?
+sum(sum(x)==37 for x in product(range(1,38), repeat=5))  # 58905
+
+# Probabilité de 7 piles en 10 lancers
+2**-10 * sum(sum(x)==7 for x in product((0,1), repeat=10))  # 0.171875
+
+# Cryptarithme SIX² = TROIS
+for s,i,x,t,r,o in permutations('0123456789', 6):
+    if int(s+i+x)**2 == int(t+r+o+i+s):
+        print(f'SIX={s+i+x} TROIS={t+r+o+i+s}')
+# SIX=169, TROIS=28561</pre>
+
+<h2>6. any() et all()</h2>
+<pre>any(L)    # True si au moins un élément est True (OU logique)
+all(L)    # True si TOUS les éléments sont True (ET logique)
+
+# Exemple : tester si n est premier
+def est_premier(n):
+    return n >= 2 and not any(n % k == 0 for k in range(2, n))</pre>
+
+<nav class="nav-bottom">
+  <a href="cours6-recursivite.html">← Cours 6 : Récursivité</a>
+  <a href="index.html">Accueil →</a>
+</nav>
+</div>
+</body>
+</html>

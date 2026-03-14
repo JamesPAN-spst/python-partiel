@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 6 — Récursivité | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Cours 6 — Récursivité</h1><a href="module6-recursivite.html" class="quiz-link">→ Quiz (18 questions)</a></div>
+<div class="container">
+
+<h2>1. Principes de la récursivité</h2>
+<p>Une fonction récursive s'appelle elle-même. Deux ingrédients obligatoires :</p>
+<pre>def f(n):
+    if n == 0:          # 1. CONDITION D'ARRÊT (obligatoire !)
+        return 1
+    return n * f(n-1)   # 2. APPEL RÉCURSIF (problème plus petit)</pre>
+
+<div class="warn-box"><b>⚠ Sans condition d'arrêt :</b> <code>RecursionError: maximum recursion depth exceeded</code><br>Profondeur max par défaut : 1000. Modifiable : <code>sys.setrecursionlimit(n)</code></div>
+
+<h3>PGCD — Algorithme d'Euclide</h3>
+<pre>pgcd = lambda a, b: a if b == 0 else pgcd(b, a % b)</pre>
+
+<h2>2. Fibonacci — 4 versions comparées</h2>
+
+<table>
+<tr><th>Version</th><th>Complexité</th><th>n=40</th></tr>
+<tr><td>Itérative (boucle for)</td><td><b>O(n)</b></td><td>instantané</td></tr>
+<tr><td>Doublement récursive</td><td><b>O(φⁿ)</b></td><td>~1 minute</td></tr>
+<tr><td>Avec mémoïsation (dict)</td><td><b>O(n)</b></td><td>instantané</td></tr>
+<tr><td>Exponentiation matricielle</td><td><b>O(log n)</b></td><td>instantané</td></tr>
+</table>
+
+<div class="warn-box"><b>⚠ La double récursion est CATASTROPHIQUE :</b> Chaque appel fib(n) génère 2 sous-appels → arbre exponentiel. fib(5) produit 15 appels, fib(40) en produit ~330 millions !</div>
+
+<h3>Mémoïsation — La solution</h3>
+<pre>F = {0: 0, 1: 1}       # cache (variable globale)
+
+def fib_memo(n):
+    if n not in F:
+        F[n] = fib_memo(n-2) + fib_memo(n-1)
+    return F[n]</pre>
+
+<div class="tip-box"><b>✓ Principe :</b> Stocker chaque résultat dans un dictionnaire. Si fib(k) est déjà calculé, on le retrouve en O(1) au lieu de recalculer.</div>
+
+<h2>3. Diviser pour régner</h2>
+<p>Principe : découper un problème en sous-problèmes de même nature, les résoudre récursivement, puis combiner les solutions.</p>
+
+<h3>Tri rapide (Quicksort)</h3>
+<pre>def tri(L):
+    if len(L) == 0:
+        return []
+    x = L[0]                                    # pivot
+    L1 = [a for a in L[1:] if a < x]            # éléments < pivot
+    L2 = [a for a in L[1:] if a >= x]           # éléments ≥ pivot
+    return tri(L1) + [x] + tri(L2)</pre>
+<p>Complexité : <b>O(N log N)</b> en moyenne, <b>O(N²)</b> dans le pire cas (pivot toujours min/max).</p>
+
+<h3>Tri fusion (Merge sort)</h3>
+<pre>def tri_fusion(L):
+    n = len(L)
+    if n <= 1:
+        return L
+    n1 = n // 2
+    T1 = tri_fusion(L[:n1])
+    T2 = tri_fusion(L[n1:])
+    # fusion de T1 et T2 triés
+    i1, i2, T = 0, 0, []
+    while i1 < len(T1) and i2 < len(T2):
+        if T1[i1] < T2[i2]:
+            T.append(T1[i1]); i1 += 1
+        else:
+            T.append(T2[i2]); i2 += 1
+    return T + T1[i1:] + T2[i2:]</pre>
+<p>Complexité : <b>O(N log N) dans TOUS les cas</b> (pire, moyen, meilleur). C'est son avantage sur le quicksort.</p>
+
+<div class="info-box"><b>ℹ Python :</b> <code>sorted()</code> et <code>list.sort()</code> utilisent <b>Timsort</b>, un hybride tri insertion + tri fusion.</div>
+
+<h3>Exponentiation rapide</h3>
+<pre>def puissance(A, n):
+    if n == 0: return I          # matrice identité
+    if n == 1: return A
+    if n % 2 == 1:               # n impair
+        return puissance(A, n-1) * A
+    B = puissance(A, n // 2)     # n pair
+    return B * B</pre>
+<p>Complexité : <b>O(log n)</b> multiplications. Exemple : A¹⁰² ne nécessite que 9 multiplications.</p>
+
+<h2>4. Tours de Hanoï</h2>
+<pre>def hanoi(n, A, B, C):
+    if n == 0: return
+    hanoi(n-1, A, C, B)    # n-1 disques de A vers C
+    print(f'{A} → {B}')    # déplacer le grand disque
+    hanoi(n-1, C, B, A)    # n-1 disques de C vers B</pre>
+<p>Nombre de mouvements : <b>M(n) = 2ⁿ − 1</b></p>
+<table>
+<tr><th>n</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>10</td></tr>
+<tr><th>M(n)</th><td>1</td><td>3</td><td>7</td><td>15</td><td>31</td><td>1023</td></tr>
+</table>
+
+<h2>5. Formules à retenir</h2>
+<table>
+<tr><th>Algorithme</th><th>Formule</th></tr>
+<tr><td>Hanoï</td><td>2ⁿ − 1 mouvements</td></tr>
+<tr><td>minmax2 (D&C)</td><td>3n/2 − 2 comparaisons pour n = 2<sup>k</sup></td></tr>
+<tr><td>Fibonacci</td><td>F<sub>n</sub> ≈ φⁿ/√5, &nbsp; φ = (1+√5)/2</td></tr>
+<tr><td>Syracuse u₀=27</td><td>Temps de vol = 111</td></tr>
+</table>
+
+<nav class="nav-bottom">
+  <a href="cours5-fonctions.html">← Cours 5 : Fonctions</a>
+  <a href="cours7-generateurs.html">Cours 7 : Générateurs →</a>
+</nav>
+</div>
+</body>
+</html>

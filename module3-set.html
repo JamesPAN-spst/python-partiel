@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — Set | AP2 Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7;transition:.2s}.header .back:hover{opacity:1;text-decoration:none}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .badge{background:var(--amber-dim);color:var(--amber);font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:600;letter-spacing:.5px}.score-display{margin-left:8px;display:flex;gap:12px;font-size:.85rem;color:var(--txt2)}.score-display span{font-weight:700;color:var(--green)}.score-display .wrong{color:var(--red)}.container{max-width:860px;margin:0 auto;padding:24px 20px 80px}.drawer-toggle{width:100%;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 20px;color:var(--amber);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:.2s;margin-bottom:8px;font-family:var(--body-font)}.drawer-toggle:hover{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(245,158,11,.06));border-color:rgba(245,158,11,.35)}.drawer-toggle .arrow{transition:transform .3s;font-size:1.1rem}.drawer-toggle.open .arrow{transform:rotate(180deg)}.drawer-content{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--bg2);border-radius:0 0 var(--radius) var(--radius);margin-top:-8px;margin-bottom:20px}.drawer-content.open{max-height:3000px}.drawer-inner{padding:20px;font-size:.88rem;line-height:1.75;color:var(--txt2)}.drawer-inner h3{color:var(--amber);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(245,158,11,.15)}.drawer-inner h3:first-child{margin-top:0}.drawer-inner code{background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.drawer-inner .warn{color:var(--orange);font-weight:600}.drawer-inner .key{color:var(--green)}.drawer-inner ul{padding-left:20px}.drawer-inner li{margin:4px 0}.section-title{font-size:1.15rem;font-weight:700;color:var(--txt);margin:32px 0 16px;padding-left:12px;border-left:3px solid var(--amber);display:flex;align-items:center;gap:10px}.section-title .count{font-size:.75rem;background:var(--bg3);color:var(--txt2);padding:2px 10px;border-radius:20px}.quiz-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:border-color .3s}.quiz-card.correct{border-color:rgba(34,197,94,.4)}.quiz-card.wrong{border-color:rgba(239,68,68,.4)}.quiz-head{padding:16px 20px 12px;display:flex;align-items:flex-start;gap:10px}.q-num{font-size:.7rem;font-weight:700;color:var(--bg);background:var(--amber);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}.q-num.done-right{background:var(--green)}.q-num.done-wrong{background:var(--red)}.q-text{font-size:.92rem;flex:1}.q-text code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}.diff-tag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}.diff-tag.easy{background:rgba(34,197,94,.15);color:var(--green)}.diff-tag.medium{background:rgba(249,115,22,.15);color:var(--orange)}.diff-tag.hard{background:rgba(239,68,68,.15);color:var(--red)}.code-block{background:var(--bg);border-radius:6px;padding:12px 16px;margin:10px 20px 4px;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan);overflow-x:auto;white-space:pre;border:1px solid var(--bg3)}.options{padding:4px 20px 16px}.opt-btn{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;margin:6px 0;color:var(--txt);font-size:.88rem;cursor:pointer;transition:.2s;font-family:var(--body-font);line-height:1.5}.opt-btn:hover:not(.locked){background:var(--bg4);border-color:rgba(245,158,11,.3)}.opt-btn code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.opt-btn.selected-right{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}.opt-btn.selected-wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}.opt-btn.reveal-right{border-color:rgba(34,197,94,.3);color:var(--green)}.opt-btn.locked{cursor:default;opacity:.85}.input-area{padding:4px 20px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.input-area input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;color:var(--txt);font-family:var(--code-font);font-size:.88rem;outline:none;transition:.2s}.input-area input:focus{border-color:var(--amber)}.input-area input.right{border-color:var(--green);color:var(--green)}.input-area input.wrong-input{border-color:var(--red);color:var(--red)}.submit-btn{background:var(--amber);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:var(--body-font);transition:.2s}.submit-btn:hover{background:var(--amber2)}.submit-btn:disabled{opacity:.4;cursor:default}.explanation{padding:0 20px 16px;display:none}.explanation.show{display:block}.expl-box{background:rgba(245,158,11,.06);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.85rem;color:var(--txt2);line-height:1.7}.expl-box code{background:var(--bg);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.8rem;color:var(--cyan)}.footer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--bg3);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:20px;z-index:100}.footer-bar .progress-text{font-size:.85rem;color:var(--txt2)}.footer-bar .progress-text b{color:var(--amber)}.progress-bar-bg{flex:1;max-width:300px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}.progress-bar-fill{height:100%;background:var(--amber);border-radius:3px;transition:width .4s}.retry-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s;display:none}.retry-btn:hover{background:rgba(239,68,68,.1)}.retry-btn.show{display:block}
+.reset-btn{background:transparent;border:1px solid var(--txt3,#6e7681);color:var(--txt2);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(139,148,158,.1);border-color:var(--txt2)}
+.reset-one-wrap{padding:0 20px 14px}
+.reset-one-btn{background:transparent;border:1px dashed var(--txt3,#6e7681);color:var(--txt2);border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:var(--body-font);transition:.2s}
+.reset-one-btn:hover{border-color:var(--amber);color:var(--amber);border-style:solid}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:16px 12px 80px}.quiz-head{padding:14px 14px 10px}.options,.input-area,.explanation{padding-left:14px;padding-right:14px}.code-block{margin-left:14px;margin-right:14px;font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Module 3 — Ensembles (set)</h1><span class="badge">SET · OPÉRATEURS</span><a href="cours3-set.html" style="margin-left:auto;background:rgba(167,139,250,.15);color:#a78bfa;padding:5px 14px;border-radius:7px;font-size:.78rem;font-weight:600;border:1px solid rgba(167,139,250,.2);text-decoration:none">📚 Cours</a><div class="score-display"><div>✓ <span id="scoreRight">0</span></div><div>✗ <span id="scoreWrong" class="wrong">0</span></div></div></div>
+<div class="container">
+<button class="drawer-toggle" onclick="toggleDrawer(this)">📋 Antisèche — set <span class="arrow">▼</span></button>
+<div class="drawer-content" id="cheatsheet"><div class="drawer-inner">
+<h3>Création et propriétés</h3>
+<ul>
+  <li>Non ordonné, mutable, éléments <b>uniques</b> et <b>hachables</b></li>
+  <li class="warn">⚠ Ensemble vide = <code>set()</code>, PAS <code>{}</code> (qui est un dict vide !)</li>
+  <li><code>set('python')</code> = <code>{'p','y','t','h','o','n'}</code> (6 caractères uniques)</li>
+  <li>Éléments autorisés : int, float, str, tuple, frozenset</li>
+  <li class="warn">⚠ PAS de list ni de set comme élément (non hachables)</li>
+</ul>
+<h3>Opérateurs ensemblistes</h3>
+<ul>
+  <li><code>A | B</code> = union, <code>A & B</code> = intersection, <code>A - B</code> = différence</li>
+  <li><code>A <= B</code> = inclusion large, <code>A < B</code> = inclusion stricte</li>
+  <li class="warn">⚠ PRIORITÉ : <code>&</code> > <code>|</code> > <code>-</code>, et TOUS avant <code>in</code></li>
+  <li class="warn">⚠ PIÈGE MORTEL : <code>2 in {1,3} & {2,4}</code> = <code>2 in set()</code> = <b>False</b></li>
+</ul>
+<h3>Méthodes</h3>
+<ul>
+  <li><code>add(e)</code> : ajoute e</li>
+  <li><code>discard(e)</code> : supprime e, <span class="key">silencieux si absent</span></li>
+  <li><code>remove(e)</code> : supprime e, <span class="warn">KeyError si absent</span></li>
+  <li><code>pop()</code> : retire un élément quelconque (KeyError si vide)</li>
+  <li><code>clear()</code> : vide l’ensemble</li>
+</ul>
+</div></div>
+
+<div class="section-title">🧠 Quiz <span class="count" id="progressText">0 / 15</span></div>
+<div id="quizContainer"></div>
+</div>
+<div class="footer-bar"><span class="progress-text"><b id="footProg">0</b> / <b id="footTotal">15</b></span><div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar" style="width:0%"></div></div><button class="retry-btn" id="retryBtn" onclick="retryWrong()">🔄 Réessayer les erreurs</button>
+  <button class="reset-btn" onclick="resetAll()">🗑️ Tout réinitialiser</button></div>
+
+<script>
+const questions=[
+  {id:1,type:"mcq",diff:"easy",text:"Que crée <code>{}</code> en Python ?",options:["Un set vide","Un dict vide","Un frozenset vide","<code>SyntaxError</code>"],answer:1,explanation:"<code>{}</code> crée un <b>dictionnaire vide</b>, pas un ensemble. Pour un set vide : <code>set()</code>."},
+  {id:2,type:"input",diff:"easy",text:"Que vaut <code>len(set('hello'))</code> ?",answer:"4",accept:["4"],explanation:"<code>set('hello')</code> = <code>{'h','e','l','o'}</code>. Le 'l' en double est dédupliqué. Donc 4 éléments."},
+  {id:3,type:"mcq",diff:"hard",text:"Que vaut <code>2 in {1,3} & {2,4}</code> ?",options:["<code>True</code>","<code>False</code>","<code>TypeError</code>","<code>{2}</code>"],answer:1,explanation:"<b>PIÈGE DE PRIORITÉ !</b> <code>&</code> s’évalue avant <code>in</code>. Donc c’est <code>2 in ({1,3} & {2,4})</code> = <code>2 in set()</code> = <b>False</b>. L’intersection de {1,3} et {2,4} est vide."},
+  {id:4,type:"input",diff:"medium",text:"Après <code>A={1,'n'}; A.add('t')</code>, que vaut <code>A & set('python')</code> ?<br><small>Format : <code>{'a','b'}</code> (ordre quelconque)</small>",answer:"{'n', 't'}",accept:["{'n', 't'}","{'t', 'n'}","{'n','t'}","{'t','n'}"],explanation:"<code>A</code> = {1, 'n', 't'}. <code>set('python')</code> = {'p','y','t','h','o','n'}. Intersection : {'n','t'} (1 n’est pas dans set('python'))."},
+  {id:5,type:"tf",diff:"medium",text:"<code>{1,'n','t'} <= set('python')</code> renvoie <code>True</code>.",answer:false,explanation:"1 n’est pas dans <code>set('python')</code>, donc {1,'n','t'} n’est PAS un sous-ensemble. Résultat : <b>False</b>."},
+  {id:6,type:"input",diff:"medium",text:"Que vaut <code>{3,2,1} - {1,1,1}</code> ?",answer:"{2, 3}",accept:["{2, 3}","{3, 2}","{2,3}","{3,2}"],explanation:"<code>{1,1,1}</code> = <code>{1}</code> (déduplication). Différence : {3,2,1} - {1} = {2,3}."},
+  {id:7,type:"mcq",diff:"medium",text:"Quelle différence entre <code>remove</code> et <code>discard</code> ?",options:["Aucune différence","<code>remove</code> lève <code>KeyError</code> si absent, <code>discard</code> non","<code>discard</code> lève <code>KeyError</code> si absent, <code>remove</code> non","<code>remove</code> renvoie l’élément, <code>discard</code> non"],answer:1,explanation:"<code>remove(e)</code> lève <code>KeyError</code> si <code>e</code> est absent. <code>discard(e)</code> ne fait rien silencieusement."},
+  {id:8,type:"mcq",diff:"medium",text:"Que fait <code>S = set([1,1]); S.pop(); S.pop()</code> ?",options:["Renvoie 1 puis 1","Renvoie 1 puis <code>KeyError</code>","<code>IndexError</code>","Renvoie 1 puis <code>None</code>"],answer:1,explanation:"<code>set([1,1])</code> = {1} (un seul élément). Premier <code>pop()</code> retire 1 → ensemble vide. Deuxième <code>pop()</code> sur ensemble vide → <code>KeyError</code>."},
+  {id:9,type:"tf",diff:"easy",text:"<code>set([0,1]) < {1,2}</code> renvoie <code>True</code>.",answer:false,explanation:"<code>set([0,1])</code> = {0,1}. Pour que {0,1} ⊂ {1,2}, il faudrait que 0 ∈ {1,2}, ce qui est faux. Résultat : <b>False</b>."},
+  {id:10,type:"input",diff:"easy",text:"Après <code>z={5,3,1}; z.add(1)</code>, que vaut <code>len(z)</code> ?",answer:"3",accept:["3"],explanation:"<code>z</code> = {5,3,1}. <code>add(1)</code> ne change rien (1 est déjà présent). <code>len(z)</code> = 3."},
+  {id:11,type:"mcq",diff:"hard",text:"Que vaut <code>3 in {1,2} | {3,4}</code> ?",options:["<code>True</code>","<code>False</code>","<code>TypeError</code>","Dépend de l’ordre"],answer:0,explanation:"<code>|</code> a une priorité plus basse que <code>&</code> mais toujours plus haute que <code>in</code> ? En fait, en Python, <code>in</code> a une priorité PLUS BASSE que <code>|</code>. Donc c’est <code>3 in ({1,2} | {3,4})</code> = <code>3 in {1,2,3,4}</code> = <b>True</b>."},
+  {id:12,type:"mcq",diff:"hard",text:"Que vaut cette expression ?<div class='code-block'>A = {1, 'n'}\nA.remove(1)\nA < set('python')</div>",options:["<code>True</code>","<code>False</code>","<code>KeyError</code>","<code>TypeError</code>"],answer:0,explanation:"Après <code>remove(1)</code>, A = {'n'}. <code>set('python')</code> = {'p','y','t','h','o','n'}. {'n'} est bien un sous-ensemble strict de set('python'). Résultat : <b>True</b>."},
+  {id:13,type:"tf",diff:"medium",text:"<code>{1, [2,3]}</code> est un ensemble valide en Python.",answer:false,explanation:"Les éléments d’un set doivent être hachables. <code>[2,3]</code> est une liste (mutable, non hachable) → <code>TypeError: unhashable type: 'list'</code>."},
+  {id:14,type:"input",diff:"hard",text:"<code>A={1,'n'}; A.add('t'); C=set('python')</code><br>Que vaut <code>C - A</code> ?<br><small>Format : <code>{'a','b',...}</code></small>",answer:"{'p', 'y', 'h', 'o'}",accept:["{'p', 'y', 'h', 'o'}","{'p','y','h','o'}","{'o', 'h', 'y', 'p'}","{'h','o','p','y'}","{'y','p','o','h'}","{'o','p','y','h'}"],explanation:"A = {1,'n','t'}, C = {'p','y','t','h','o','n'}. C - A retire 'n' et 't' de C. Résultat : {'p','y','h','o'}."},
+  {id:15,type:"mcq",diff:"hard",text:"Quelle est la priorité correcte des opérateurs ensemblistes ?",options:["<code>&</code> > <code>|</code> > <code>-</code> > <code>in</code>","<code>in</code> > <code>&</code> > <code>|</code> > <code>-</code>","<code>-</code> > <code>&</code> > <code>|</code> > <code>in</code>","Tous ont la même priorité"],answer:0,explanation:"En Python : <code>&</code> (bitwise AND) > <code>|</code> (bitwise OR) > <code>-</code> n’existe pas en tant qu’op bitwise, mais pour les sets : <code>&</code> > <code>^</code> > <code>|</code>. Et tous sont évalués AVANT <code>in</code> (comparaison). C’est pourquoi <code>2 in A & B</code> évalue d’abord <code>A & B</code>."}
+];
+
+const STORAGE_KEY="ap2_mod3_state";
+let state=loadState();
+
+function loadState(){
+  try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return{answered:{},right:0,wrong:0};
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+}
+
+function render(onlyIds){
+  const c=document.getElementById("quizContainer");
+  if(!onlyIds) c.innerHTML="";
+  const qs=onlyIds?questions.filter(q=>onlyIds.includes(q.id)):questions;
+  qs.forEach(q=>{
+    const card=document.createElement("div");
+    card.className="quiz-card";
+    card.id="card-"+q.id;
+    const a=state.answered[q.id];
+    if(a!==undefined) card.classList.add(a?"correct":"wrong");
+    let nc="q-num";
+    if(a===true) nc+=" done-right";
+    else if(a===false) nc+=" done-wrong";
+    const dl=q.diff==="easy"?"Facile":q.diff==="medium"?"Moyen":"Difficile";
+    let h=`<div class="quiz-head"><div class="${nc}">${q.id}</div><div class="q-text">${q.text}</div><span class="diff-tag ${q.diff}">${dl}</span></div>`;
+
+    if(q.type==="mcq"){
+      h+=`<div class="options">`;
+      q.options.forEach((o,i)=>{
+        let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(i===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===i)cl+=" selected-wrong";if(a===true&&i===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickMCQ(${q.id},${i})">${o}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="tf"){
+      h+=`<div class="options">`;
+      ["Vrai","Faux"].forEach((l,i)=>{
+        const v=i===0;let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(v===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===v)cl+=" selected-wrong";if(a===true&&v===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickTF(${q.id},${v})">${l}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="input"){
+      const lk=a!==undefined;
+      const ic=a===true?"right":a===false?"wrong-input":"";
+      const sv=lk?(state.answered[q.id+"_val"]||"").replace(/"/g,"&quot;"):"";
+      h+=`<div class="input-area"><input type="text" id="inp-${q.id}" class="${ic}" placeholder="Votre réponse..." ${lk?"disabled":""} ${lk?`value="${sv}"`:""} onkeydown="if(event.key==='Enter')submitInput(${q.id})"><button class="submit-btn" ${lk?"disabled":""} onclick="submitInput(${q.id})">Valider</button></div>`;
+    }
+
+    h+=`<div class="explanation ${a!==undefined?'show':''}" id="expl-${q.id}"><div class="expl-box">${q.explanation}</div></div>`;
+    if(a!==undefined){
+      h+=`<div class="reset-one-wrap"><button class="reset-one-btn" onclick="resetOne(${q.id})">↩ Réessayer cette question</button></div>`;
+    }
+
+    card.innerHTML=h;
+    if(onlyIds){const old=document.getElementById("card-"+q.id);if(old)old.replaceWith(card);}
+    else c.appendChild(card);
+  });
+  updateProgress();
+}
+
+function pickMCQ(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function pickTF(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function submitInput(id){
+  const inp=document.getElementById("inp-"+id);if(!inp||!inp.value.trim())return;
+  const q=questions.find(x=>x.id===id);const v=inp.value.trim();
+  const ok=q.accept?q.accept.some(a=>a.toLowerCase()===v.toLowerCase()):v.toLowerCase()===q.answer.toLowerCase();
+  recordAnswer(id,ok,{val:v});
+}
+function recordAnswer(id,ok,extra){
+  if(state.answered[id]!==undefined)return;
+  state.answered[id]=ok;
+  if(extra.pick!==undefined)state.answered[id+"_pick"]=extra.pick;
+  if(extra.val!==undefined)state.answered[id+"_val"]=extra.val;
+  if(ok)state.right++;else state.wrong++;
+  saveState();render([id]);
+}
+
+function resetOne(id){
+  const wasRight=state.answered[id];
+  delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];
+  if(wasRight===true)state.right=Math.max(0,state.right-1);
+  else if(wasRight===false)state.wrong=Math.max(0,state.wrong-1);
+  saveState();render([id]);
+}
+
+function resetAll(){
+  state={answered:{},right:0,wrong:0};
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+  saveState();render();
+}
+
+function retryWrong(){
+  const wids=questions.filter(q=>state.answered[q.id]===false).map(q=>q.id);
+  wids.forEach(id=>{delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];});
+  state.wrong=0;state.right=questions.filter(q=>state.answered[q.id]===true).length;
+  saveState();render();
+}
+
+function updateProgress(){
+  const t=questions.length;const d=Object.keys(state.answered).filter(k=>!k.includes("_")).length;
+  document.getElementById("scoreRight").textContent=state.right;
+  document.getElementById("scoreWrong").textContent=state.wrong;
+  document.getElementById("progressText").textContent=d+" / "+t;
+  document.getElementById("footProg").textContent=d;
+  document.getElementById("footTotal").textContent=t;
+  document.getElementById("progBar").style.width=(d/t*100)+"%";
+  const rb=document.getElementById("retryBtn");
+  if(state.wrong>0&&d===t)rb.classList.add("show");else rb.classList.remove("show");
+}
+
+function toggleDrawer(btn){btn.classList.toggle("open");document.getElementById("cheatsheet").classList.toggle("open");}
+render();
+</script>
+</body>
+</html>

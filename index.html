@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP2 — Révision Partiel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;
+  --amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);
+  --green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;
+  --txt:#e6edf3;--txt2:#8b949e;
+  --radius:12px;
+  --code-font:'Fira Code','JetBrains Mono',monospace;
+  --body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif;
+}
+body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}
+
+/* === HERO === */
+.hero{text-align:center;padding:48px 24px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 80%,rgba(245,158,11,.06) 0%,transparent 50%);pointer-events:none}
+.hero h1{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--amber),#fbbf24,var(--amber2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;position:relative}
+.hero .sub{color:var(--txt2);font-size:.95rem;position:relative}
+.hero .sub b{color:var(--amber)}
+
+/* === STATS BAR === */
+.stats-bar{max-width:680px;margin:0 auto 32px;display:flex;justify-content:center;gap:24px;padding:16px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--bg3)}
+.stat{text-align:center}
+.stat .num{font-size:1.5rem;font-weight:800;color:var(--amber)}
+.stat .num.g{color:var(--green)}.stat .num.r{color:var(--red)}
+.stat .label{font-size:.72rem;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* === GLOBAL PROGRESS === */
+.global-prog{max-width:680px;margin:0 auto 40px;padding:0 20px}
+.global-prog-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.global-prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),#fbbf24);border-radius:4px;transition:width .6s}
+.global-prog-text{text-align:center;font-size:.8rem;color:var(--txt2);margin-top:6px}
+.global-prog-text b{color:var(--amber)}
+
+/* === MODULE GRID === */
+.grid{max-width:720px;margin:0 auto;padding:0 20px 60px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mod-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);padding:20px;transition:.25s;position:relative;overflow:hidden;color:var(--txt)}
+.mod-card:hover{border-color:rgba(245,158,11,.35);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.mod-card .icon{font-size:1.6rem;margin-bottom:8px;display:block}
+.mod-card .title{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.mod-card .tags{font-size:.7rem;color:var(--txt2);margin-bottom:12px}
+.mod-card .mini-bar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden}
+.mod-card .mini-fill{height:100%;background:var(--amber);border-radius:2px;transition:width .5s}
+.mod-card .mini-text{font-size:.7rem;color:var(--txt2);margin-top:6px;display:flex;justify-content:space-between}
+.mod-card .mini-text .right{color:var(--green)}.mod-card .mini-text .wrong{color:var(--red)}
+.card-links{display:flex;gap:8px;margin-top:12px}
+.card-links a{flex:1;text-align:center;padding:7px 0;border-radius:6px;font-size:.8rem;font-weight:600;transition:.2s;text-decoration:none}
+.link-cours{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)}
+.link-cours:hover{background:rgba(167,139,250,.2);text-decoration:none}
+.link-quiz{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.link-quiz:hover{background:rgba(245,158,11,.2);text-decoration:none}
+
+/* === TOP PIEGES === */
+.pieges-section{max-width:680px;margin:0 auto 40px;padding:0 20px}
+.pieges-title{font-size:1.1rem;font-weight:700;color:var(--amber);margin-bottom:16px;text-align:center}
+.piege{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:12px 16px;margin-bottom:8px;font-size:.85rem;display:flex;gap:10px;align-items:flex-start}
+.piege .num{background:var(--red);color:var(--bg);font-size:.65rem;font-weight:800;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.piege code{background:var(--bg);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.8rem;color:var(--cyan)}
+
+/* === RESET === */
+.reset-area{text-align:center;padding:20px 0 60px}
+.reset-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:8px 24px;font-size:.85rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(239,68,68,.1)}
+
+@media(max-width:600px){
+  .hero h1{font-size:1.5rem}
+  .grid{grid-template-columns:1fr;padding:0 12px 40px}
+  .stats-bar{flex-wrap:wrap;gap:16px;margin:0 12px 24px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>AP2 — Révision Partiel</h1>
+  <div class="sub"><b>Algorithmique & Programmation 2</b> — Université Paris Cité L1 S2</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num" id="totalQ">116</div><div class="label">Questions</div></div>
+  <div class="stat"><div class="num g" id="totalRight">0</div><div class="label">Correctes</div></div>
+  <div class="stat"><div class="num r" id="totalWrong">0</div><div class="label">Erreurs</div></div>
+  <div class="stat"><div class="num" id="totalPct">0%</div><div class="label">Progression</div></div>
+</div>
+
+<div class="global-prog">
+  <div class="global-prog-bar"><div class="global-prog-fill" id="globalBar" style="width:0%"></div></div>
+  <div class="global-prog-text"><b id="globalDone">0</b> / <b id="globalTotal">116</b> questions complétées</div>
+</div>
+
+<div class="grid" id="moduleGrid"></div>
+
+<div class="pieges-section">
+  <div class="pieges-title">🚨 Top 10 Pièges du Partiel</div>
+  <div class="piege"><span class="num">1</span><div>Priorité opérateurs set : <code>2 in {1,3} & {2,4}</code> → <b>False</b> (<code>&</code> avant <code>in</code>)</div></div>
+  <div class="piege"><span class="num">2</span><div>Copie liste : <code>B = A</code> ne copie pas → <code>B = A[:]</code> ou <code>A.copy()</code></div></div>
+  <div class="piege"><span class="num">3</span><div>Tuple 1 élément : <code>(1)</code> est int, <code>(1,)</code> est tuple</div></div>
+  <div class="piege"><span class="num">4</span><div>Set comme clé dict : <code>set</code> non hachable → utiliser <code>frozenset</code></div></div>
+  <div class="piege"><span class="num">5</span><div><code>remove</code> lève <code>KeyError</code> si absent, <code>discard</code> non</div></div>
+  <div class="piege"><span class="num">6</span><div>Args optionnels APRÈS les obligatoires : <code>def f(z=3, x):</code> → SyntaxError</div></div>
+  <div class="piege"><span class="num">7</span><div>Positionnel après nommé interdit : <code>f(x=1, 2)</code> → SyntaxError</div></div>
+  <div class="piege"><span class="num">8</span><div>Double récursion = complexité exponentielle → mémoïsation</div></div>
+  <div class="piege"><span class="num">9</span><div>Générateur ≠ liste : <code>(x for ...)</code> ≠ <code>[x for ...]</code></div></div>
+  <div class="piege"><span class="num">10</span><div><code>int(-3.7)</code> = −3 (vers 0) ≠ <code>floor(-3.7)</code> = −4 (vers −∞)</div></div>
+</div>
+
+<div class="reset-area">
+  <button class="reset-btn" onclick="resetAll()">🗑️ Réinitialiser toute la progression</button>
+</div>
+
+<script>
+const modules = [
+  {id:1, icon:"\ud83d\udd22", title:"Types num\u00e9riques", tags:"int \u00b7 float \u00b7 complex", file:"module1-types-numeriques.html", cours:"cours1-types-numeriques.html", key:"ap2_mod1_state", total:20},
+  {id:2, icon:"\ud83d\udce6", title:"Tuple & Frozenset", tags:"immutables \u00b7 zip \u00b7 enumerate", file:"module2-tuple-frozenset.html", cours:"cours2-tuple-frozenset.html", key:"ap2_mod2_state", total:15},
+  {id:3, icon:"\ud83d\udd35", title:"Ensembles (set)", tags:"op\u00e9rateurs \u00b7 priorit\u00e9 \u00b7 m\u00e9thodes", file:"module3-set.html", cours:"cours3-set.html", key:"ap2_mod3_state", total:15},
+  {id:4, icon:"\ud83d\udcd6", title:"Dictionnaires", tags:"dict \u00b7 cl\u00e9s \u00b7 get \u00b7 items", file:"module4-dict.html", cours:"cours4-dict.html", key:"ap2_mod4_state", total:15},
+  {id:5, icon:"\u26a1", title:"Fonctions & Lambda", tags:"def \u00b7 args \u00b7 lambda \u00b7 trap\u00e8zes", file:"module5-fonctions.html", cours:"cours5-fonctions.html", key:"ap2_mod5_state", total:15},
+  {id:6, icon:"\ud83c\udf00", title:"R\u00e9cursivit\u00e9", tags:"memo \u00b7 D&C \u00b7 Hanoi \u00b7 tri", file:"module6-recursivite.html", cours:"cours6-recursivite.html", key:"ap2_mod6_state", total:18},
+  {id:7, icon:"\u267b\ufe0f", title:"G\u00e9n\u00e9rateurs", tags:"yield \u00b7 itertools \u00b7 expressions", file:"module7-generateurs.html", cours:"cours7-generateurs.html", key:"ap2_mod7_state", total:18}
+];
+
+function getModState(key){
+  try{const s=localStorage.getItem(key);if(s)return JSON.parse(s)}catch(e){}
+  return{answered:{},right:0,wrong:0};
+}
+
+function renderModules(){
+  const grid = document.getElementById("moduleGrid");
+  grid.innerHTML = "";
+  let gRight=0, gWrong=0, gDone=0, gTotal=0;
+
+  modules.forEach(m=>{
+    const st = getModState(m.key);
+    const done = Object.keys(st.answered).filter(k=>!k.includes("_")).length;
+    const pct = m.total > 0 ? Math.round(done/m.total*100) : 0;
+    gRight += st.right; gWrong += st.wrong; gDone += done; gTotal += m.total;
+
+    const card = document.createElement("div");
+    card.className = "mod-card";
+    card.innerHTML = `
+      <span class="icon">${m.icon}</span>
+      <div class="title">Module ${m.id} — ${m.title}</div>
+      <div class="tags">${m.tags}</div>
+      <div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div>
+      <div class="mini-text">
+        <span>${pct}%</span>
+        <span><span class="right">✓${st.right}</span> <span class="wrong">✗${st.wrong}</span></span>
+      </div>
+      <div class="card-links">
+        <a href="${m.cours}" class="link-cours">📚 Cours</a>
+        <a href="${m.file}" class="link-quiz">🧠 Quiz</a>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById("totalRight").textContent = gRight;
+  document.getElementById("totalWrong").textContent = gWrong;
+  const gPct = gTotal > 0 ? Math.round(gDone/gTotal*100) : 0;
+  document.getElementById("totalPct").textContent = gPct + "%";
+  document.getElementById("totalQ").textContent = gTotal;
+  document.getElementById("globalBar").style.width = gPct + "%";
+  document.getElementById("globalDone").textContent = gDone;
+  document.getElementById("globalTotal").textContent = gTotal;
+}
+
+function resetAll(){
+  if(!confirm("Réinitialiser TOUTE la progression de tous les modules ?")) return;
+  modules.forEach(m=>localStorage.removeItem(m.key));
+  renderModules();
+}
+
+renderModules();
+</script>
+</body>
+</html>

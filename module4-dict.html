@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 — Dictionnaires | AP2 Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7;transition:.2s}.header .back:hover{opacity:1;text-decoration:none}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .badge{background:var(--amber-dim);color:var(--amber);font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:600;letter-spacing:.5px}.score-display{margin-left:8px;display:flex;gap:12px;font-size:.85rem;color:var(--txt2)}.score-display span{font-weight:700;color:var(--green)}.score-display .wrong{color:var(--red)}.container{max-width:860px;margin:0 auto;padding:24px 20px 80px}.drawer-toggle{width:100%;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 20px;color:var(--amber);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:.2s;margin-bottom:8px;font-family:var(--body-font)}.drawer-toggle:hover{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(245,158,11,.06))}.drawer-toggle .arrow{transition:transform .3s;font-size:1.1rem}.drawer-toggle.open .arrow{transform:rotate(180deg)}.drawer-content{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--bg2);border-radius:0 0 var(--radius) var(--radius);margin-top:-8px;margin-bottom:20px}.drawer-content.open{max-height:3000px}.drawer-inner{padding:20px;font-size:.88rem;line-height:1.75;color:var(--txt2)}.drawer-inner h3{color:var(--amber);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(245,158,11,.15)}.drawer-inner h3:first-child{margin-top:0}.drawer-inner code{background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.drawer-inner .warn{color:var(--orange);font-weight:600}.drawer-inner .key{color:var(--green)}.drawer-inner ul{padding-left:20px}.drawer-inner li{margin:4px 0}.section-title{font-size:1.15rem;font-weight:700;margin:32px 0 16px;padding-left:12px;border-left:3px solid var(--amber);display:flex;align-items:center;gap:10px}.section-title .count{font-size:.75rem;background:var(--bg3);color:var(--txt2);padding:2px 10px;border-radius:20px}.quiz-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:border-color .3s}.quiz-card.correct{border-color:rgba(34,197,94,.4)}.quiz-card.wrong{border-color:rgba(239,68,68,.4)}.quiz-head{padding:16px 20px 12px;display:flex;align-items:flex-start;gap:10px}.q-num{font-size:.7rem;font-weight:700;color:var(--bg);background:var(--amber);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}.q-num.done-right{background:var(--green)}.q-num.done-wrong{background:var(--red)}.q-text{font-size:.92rem;flex:1}.q-text code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}.diff-tag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}.diff-tag.easy{background:rgba(34,197,94,.15);color:var(--green)}.diff-tag.medium{background:rgba(249,115,22,.15);color:var(--orange)}.diff-tag.hard{background:rgba(239,68,68,.15);color:var(--red)}.code-block{background:var(--bg);border-radius:6px;padding:12px 16px;margin:10px 20px 4px;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan);overflow-x:auto;white-space:pre;border:1px solid var(--bg3)}.options{padding:4px 20px 16px}.opt-btn{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;margin:6px 0;color:var(--txt);font-size:.88rem;cursor:pointer;transition:.2s;font-family:var(--body-font);line-height:1.5}.opt-btn:hover:not(.locked){background:var(--bg4);border-color:rgba(245,158,11,.3)}.opt-btn code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.opt-btn.selected-right{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}.opt-btn.selected-wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}.opt-btn.reveal-right{border-color:rgba(34,197,94,.3);color:var(--green)}.opt-btn.locked{cursor:default;opacity:.85}.input-area{padding:4px 20px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.input-area input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;color:var(--txt);font-family:var(--code-font);font-size:.88rem;outline:none;transition:.2s}.input-area input:focus{border-color:var(--amber)}.input-area input.right{border-color:var(--green);color:var(--green)}.input-area input.wrong-input{border-color:var(--red);color:var(--red)}.submit-btn{background:var(--amber);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:var(--body-font)}.submit-btn:hover{background:var(--amber2)}.submit-btn:disabled{opacity:.4;cursor:default}.explanation{padding:0 20px 16px;display:none}.explanation.show{display:block}.expl-box{background:rgba(245,158,11,.06);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.85rem;color:var(--txt2);line-height:1.7}.expl-box code{background:var(--bg);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.8rem;color:var(--cyan)}.footer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--bg3);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:20px;z-index:100}.footer-bar .progress-text{font-size:.85rem;color:var(--txt2)}.footer-bar .progress-text b{color:var(--amber)}.progress-bar-bg{flex:1;max-width:300px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}.progress-bar-fill{height:100%;background:var(--amber);border-radius:3px;transition:width .4s}.retry-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s;display:none}.retry-btn:hover{background:rgba(239,68,68,.1)}.retry-btn.show{display:block}
+.reset-btn{background:transparent;border:1px solid var(--txt3,#6e7681);color:var(--txt2);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(139,148,158,.1);border-color:var(--txt2)}
+.reset-one-wrap{padding:0 20px 14px}
+.reset-one-btn{background:transparent;border:1px dashed var(--txt3,#6e7681);color:var(--txt2);border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:var(--body-font);transition:.2s}
+.reset-one-btn:hover{border-color:var(--amber);color:var(--amber);border-style:solid}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:16px 12px 80px}.quiz-head{padding:14px 14px 10px}.options,.input-area,.explanation{padding-left:14px;padding-right:14px}.code-block{margin-left:14px;margin-right:14px;font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Module 4 — Dictionnaires</h1><span class="badge">DICT · CLÉS · GET</span><a href="cours4-dict.html" style="margin-left:auto;background:rgba(167,139,250,.15);color:#a78bfa;padding:5px 14px;border-radius:7px;font-size:.78rem;font-weight:600;border:1px solid rgba(167,139,250,.2);text-decoration:none">📚 Cours</a><div class="score-display"><div>✓ <span id="scoreRight">0</span></div><div>✗ <span id="scoreWrong" class="wrong">0</span></div></div></div>
+<div class="container">
+<button class="drawer-toggle" onclick="toggleDrawer(this)">📋 Antisèche — dict <span class="arrow">▼</span></button>
+<div class="drawer-content" id="cheatsheet"><div class="drawer-inner">
+<h3>Création</h3>
+<ul>
+  <li><code>{'a': 1, 'b': 2}</code> ou <code>dict(a=1, b=2)</code></li>
+  <li class="warn">⚠ <code>dict('a'=1)</code> → SyntaxError (guillemets interdits dans syntaxe mot-clé)</li>
+  <li class="warn">⚠ <code>dict('a':1)</code> → SyntaxError (syntaxe accolades uniquement)</li>
+  <li><code>{}</code> = dict vide (PAS un set vide !)</li>
+</ul>
+<h3>Accès et modification</h3>
+<ul>
+  <li><code>D[k]</code> : accès, <span class="warn">KeyError si k absent</span></li>
+  <li><code>D.get(k, v)</code> : renvoie D[k] si k existe, sinon v (<span class="key">jamais d’erreur</span>)</li>
+  <li><code>D[k] = val</code> : ajoute ou modifie</li>
+  <li><code>del D[k]</code> : supprime, KeyError si absent</li>
+  <li>Pas de tranches : <code>D[2:4]</code> → TypeError</li>
+</ul>
+<h3>Parcours</h3>
+<ul>
+  <li><code>D.keys()</code>, <code>D.values()</code>, <code>D.items()</code></li>
+  <li><code>k in D</code> équivaut à <code>k in D.keys()</code></li>
+  <li><code>for k, v in D.items():</code> → parcours clé-valeur</li>
+</ul>
+<h3>Clés hachables</h3>
+<ul>
+  <li>Clés doivent être <b>immutables et hachables</b></li>
+  <li><code>list</code> → utiliser <code>tuple</code></li>
+  <li><code>set</code> → utiliser <code>frozenset</code></li>
+  <li class="warn">⚠ <code>D[{1,4}]</code> → TypeError unhashable → <code>D[frozenset({1,4})]</code></li>
+</ul>
+</div></div>
+
+<div class="section-title">🧠 Quiz <span class="count" id="progressText">0 / 15</span></div>
+<div id="quizContainer"></div>
+</div>
+<div class="footer-bar"><span class="progress-text"><b id="footProg">0</b> / <b id="footTotal">15</b></span><div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar" style="width:0%"></div></div><button class="retry-btn" id="retryBtn" onclick="retryWrong()">🔄 Réessayer les erreurs</button>
+  <button class="reset-btn" onclick="resetAll()">🗑️ Tout réinitialiser</button></div>
+
+<script>
+const questions=[
+  {id:1,type:"mcq",diff:"easy",text:"Que fait <code>dict('a'=1)</code> ?",options:["Crée <code>{'a': 1}</code>","<code>SyntaxError</code>","<code>TypeError</code>","<code>NameError</code>"],answer:1,explanation:"<code>dict('a'=1)</code> lève <code>SyntaxError</code> : les guillemets sont interdits dans la syntaxe mot-clé. Écrire <code>dict(a=1)</code> ou <code>{'a': 1}</code>."},
+  {id:2,type:"mcq",diff:"easy",text:"Que fait <code>dict('a':1)</code> ?",options:["Crée <code>{'a': 1}</code>","<code>SyntaxError</code>","<code>TypeError</code>","<code>KeyError</code>"],answer:1,explanation:"La syntaxe <code>clé: valeur</code> est réservée aux accolades <code>{}</code>. <code>dict('a':1)</code> → <code>SyntaxError</code>."},
+  {id:3,type:"mcq",diff:"medium",text:"<code>D = {'x':1, 'y':2}</code>. Que renvoie <code>D[0]</code> ?",options:["<code>1</code> (premier élément)","<code>('x', 1)</code>","<code>KeyError</code>","<code>IndexError</code>"],answer:2,explanation:"Un dict n’est PAS indexé par position. <code>D[0]</code> cherche la clé <code>0</code>, qui n’existe pas → <code>KeyError: 0</code>."},
+  {id:4,type:"input",diff:"easy",text:"<code>D = {'a':1, 'b':2}</code>. Que renvoie <code>D.get('c', 0)</code> ?",answer:"0",accept:["0"],explanation:"La clé 'c' n’existe pas. <code>get</code> renvoie la valeur par défaut : <b>0</b>."},
+  {id:5,type:"mcq",diff:"medium",text:"Que fait <code>D[{1,4}]</code> si D est un dict ?",options:["Accède à la clé {1,4}","<code>TypeError: unhashable type: 'set'</code>","<code>KeyError</code>","<code>IndexError</code>"],answer:1,explanation:"Un <code>set</code> n’est pas hachable, donc ne peut pas servir de clé. <code>TypeError</code>. Utiliser <code>frozenset({1,4})</code>."},
+  {id:6,type:"tf",diff:"medium",text:"<code>'a' in {'a':1, 'b':2}</code> renvoie <code>True</code>.",answer:true,explanation:"<code>in</code> sur un dict teste les <b>clés</b>, pas les valeurs. 'a' est bien une clé."},
+  {id:7,type:"tf",diff:"medium",text:"<code>1 in {'a':1, 'b':2}</code> renvoie <code>True</code>.",answer:false,explanation:"<code>in</code> teste les <b>clés</b>. 1 n’est pas une clé (c’est une valeur). Résultat : <b>False</b>."},
+  {id:8,type:"input",diff:"medium",text:"<code>D = {'a':1, 'b':2, 'c':3}</code>. Que renvoie <code>list(D.values())</code> ?<br><small>Format : <code>[1, 2, 3]</code></small>",answer:"[1, 2, 3]",accept:["[1, 2, 3]","[1,2,3]"],explanation:"<code>D.values()</code> renvoie les valeurs dans l’ordre d’insertion (Python 3.7+)."},
+  {id:9,type:"mcq",diff:"hard",text:"Que fait <code>D[2:4]</code> si D est un dict ?",options:["Renvoie une tranche","<code>TypeError</code>","<code>KeyError</code>","Renvoie un sous-dict"],answer:1,explanation:"Les dictionnaires ne supportent PAS le slicing. <code>D[2:4]</code> → <code>TypeError: unhashable type: 'slice'</code>."},
+  {id:10,type:"mcq",diff:"medium",text:"Que renvoie ce code ?<div class='code-block'>D = {}\nD[(1,2)] = 'ok'\nprint(D[(1,2)])</div>",options:["<code>'ok'</code>","<code>TypeError</code>","<code>KeyError</code>","<code>SyntaxError</code>"],answer:0,explanation:"Un <code>tuple</code> est hachable (si ses éléments le sont). <code>(1,2)</code> est une clé valide."},
+  {id:11,type:"mcq",diff:"hard",text:"Que renvoie ce code ?<div class='code-block'>D = {}\nD[[1,2]] = 'ok'</div>",options:["Crée <code>{[1,2]: 'ok'}</code>","<code>TypeError: unhashable type: 'list'</code>","<code>KeyError</code>","<code>ValueError</code>"],answer:1,explanation:"Une <code>list</code> n’est pas hachable → ne peut pas être clé. Utiliser <code>tuple</code> : <code>D[(1,2)] = 'ok'</code>."},
+  {id:12,type:"input",diff:"hard",text:"Scrabble : J=8, O=1, Y=10, E=1, U=1, X=10.<br>Que vaut le score de JOYEUX ?",answer:"31",accept:["31"],explanation:"J(8) + O(1) + Y(10) + E(1) + U(1) + X(10) = <b>31</b>."},
+  {id:13,type:"mcq",diff:"medium",text:"Comment parcourir clés ET valeurs d’un dict ?",options:["<code>for k, v in D:</code>","<code>for k, v in D.items():</code>","<code>for k, v in D.values():</code>","<code>for (k, v) in D.keys():</code>"],answer:1,explanation:"<code>D.items()</code> renvoie des paires (clé, valeur). <code>for k, v in D:</code> ne déballe que les clés."},
+  {id:14,type:"tf",diff:"easy",text:"<code>len({'a':1, 'b':2, 'a':3})</code> vaut 3.",answer:false,explanation:"La clé 'a' apparaît deux fois : la deuxième écrase la première. Dict final : {'a':3, 'b':2}. <code>len</code> = <b>2</b>."},
+  {id:15,type:"input",diff:"hard",text:"Que renvoie ce code ?<div class='code-block'>d = {'x':1, 'y':2, 't':False}\ndef f(x, y, z=3, L=[], t=True):\n    return x + y + z\nprint(f(**d))</div>",answer:"6",accept:["6"],explanation:"<code>f(**d)</code> = <code>f(x=1, y=2, t=False)</code>. <code>z</code> garde sa valeur par défaut 3. Retour : 1 + 2 + 3 = <b>6</b>."}
+];
+
+const STORAGE_KEY="ap2_mod4_state";
+let state=loadState();
+
+function loadState(){
+  try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return{answered:{},right:0,wrong:0};
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+}
+
+function render(onlyIds){
+  const c=document.getElementById("quizContainer");
+  if(!onlyIds) c.innerHTML="";
+  const qs=onlyIds?questions.filter(q=>onlyIds.includes(q.id)):questions;
+  qs.forEach(q=>{
+    const card=document.createElement("div");
+    card.className="quiz-card";
+    card.id="card-"+q.id;
+    const a=state.answered[q.id];
+    if(a!==undefined) card.classList.add(a?"correct":"wrong");
+    let nc="q-num";
+    if(a===true) nc+=" done-right";
+    else if(a===false) nc+=" done-wrong";
+    const dl=q.diff==="easy"?"Facile":q.diff==="medium"?"Moyen":"Difficile";
+    let h=`<div class="quiz-head"><div class="${nc}">${q.id}</div><div class="q-text">${q.text}</div><span class="diff-tag ${q.diff}">${dl}</span></div>`;
+
+    if(q.type==="mcq"){
+      h+=`<div class="options">`;
+      q.options.forEach((o,i)=>{
+        let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(i===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===i)cl+=" selected-wrong";if(a===true&&i===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickMCQ(${q.id},${i})">${o}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="tf"){
+      h+=`<div class="options">`;
+      ["Vrai","Faux"].forEach((l,i)=>{
+        const v=i===0;let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(v===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===v)cl+=" selected-wrong";if(a===true&&v===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickTF(${q.id},${v})">${l}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="input"){
+      const lk=a!==undefined;
+      const ic=a===true?"right":a===false?"wrong-input":"";
+      const sv=lk?(state.answered[q.id+"_val"]||"").replace(/"/g,"&quot;"):"";
+      h+=`<div class="input-area"><input type="text" id="inp-${q.id}" class="${ic}" placeholder="Votre réponse..." ${lk?"disabled":""} ${lk?`value="${sv}"`:""} onkeydown="if(event.key==='Enter')submitInput(${q.id})"><button class="submit-btn" ${lk?"disabled":""} onclick="submitInput(${q.id})">Valider</button></div>`;
+    }
+
+    h+=`<div class="explanation ${a!==undefined?'show':''}" id="expl-${q.id}"><div class="expl-box">${q.explanation}</div></div>`;
+    if(a!==undefined){
+      h+=`<div class="reset-one-wrap"><button class="reset-one-btn" onclick="resetOne(${q.id})">↩ Réessayer cette question</button></div>`;
+    }
+
+    card.innerHTML=h;
+    if(onlyIds){const old=document.getElementById("card-"+q.id);if(old)old.replaceWith(card);}
+    else c.appendChild(card);
+  });
+  updateProgress();
+}
+
+function pickMCQ(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function pickTF(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function submitInput(id){
+  const inp=document.getElementById("inp-"+id);if(!inp||!inp.value.trim())return;
+  const q=questions.find(x=>x.id===id);const v=inp.value.trim();
+  const ok=q.accept?q.accept.some(a=>a.toLowerCase()===v.toLowerCase()):v.toLowerCase()===q.answer.toLowerCase();
+  recordAnswer(id,ok,{val:v});
+}
+function recordAnswer(id,ok,extra){
+  if(state.answered[id]!==undefined)return;
+  state.answered[id]=ok;
+  if(extra.pick!==undefined)state.answered[id+"_pick"]=extra.pick;
+  if(extra.val!==undefined)state.answered[id+"_val"]=extra.val;
+  if(ok)state.right++;else state.wrong++;
+  saveState();render([id]);
+}
+
+function resetOne(id){
+  const wasRight=state.answered[id];
+  delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];
+  if(wasRight===true)state.right=Math.max(0,state.right-1);
+  else if(wasRight===false)state.wrong=Math.max(0,state.wrong-1);
+  saveState();render([id]);
+}
+
+function resetAll(){
+  state={answered:{},right:0,wrong:0};
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+  saveState();render();
+}
+
+function retryWrong(){
+  const wids=questions.filter(q=>state.answered[q.id]===false).map(q=>q.id);
+  wids.forEach(id=>{delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];});
+  state.wrong=0;state.right=questions.filter(q=>state.answered[q.id]===true).length;
+  saveState();render();
+}
+
+function updateProgress(){
+  const t=questions.length;const d=Object.keys(state.answered).filter(k=>!k.includes("_")).length;
+  document.getElementById("scoreRight").textContent=state.right;
+  document.getElementById("scoreWrong").textContent=state.wrong;
+  document.getElementById("progressText").textContent=d+" / "+t;
+  document.getElementById("footProg").textContent=d;
+  document.getElementById("footTotal").textContent=t;
+  document.getElementById("progBar").style.width=(d/t*100)+"%";
+  const rb=document.getElementById("retryBtn");
+  if(state.wrong>0&&d===t)rb.classList.add("show");else rb.classList.remove("show");
+}
+
+function toggleDrawer(btn){btn.classList.toggle("open");document.getElementById("cheatsheet").classList.toggle("open");}
+render();
+</script>
+</body>
+</html>

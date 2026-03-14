@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 5 — Fonctions & Lambda | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Cours 5 — Fonctions & Lambda</h1><a href="module5-fonctions.html" class="quiz-link">→ Quiz (15 questions)</a></div>
+<div class="container">
+
+<h2>1. Fonctions de base</h2>
+<h3>Procédures et return</h3>
+<p>Une fonction sans <code>return</code> (ou avec <code>return</code> seul) renvoie <code>None</code> :</p>
+<pre>def afficher(x):
+    print(x)        # pas de return
+
+y = afficher(42)    # affiche 42
+print(y)            # None
+type(y)             # NoneType</pre>
+
+<div class="tip-box"><b>✓ Bonne pratique :</b> Tester <code>y is None</code> plutôt que <code>y == None</code>.</div>
+
+<h3>Retour multiple</h3>
+<pre>def minmax(L):
+    return min(L), max(L)   # retourne un tuple implicite
+
+a, b = minmax([3,1,4])     # a=1, b=4</pre>
+
+<h3>Fonctions comme objets</h3>
+<p>Les fonctions sont des objets Python de première classe. On peut les passer en argument :</p>
+<pre>def appliquer(f, x):
+    return f(x)
+
+appliquer(abs, -5)          # 5
+appliquer(len, 'hello')     # 5</pre>
+
+<h2>2. Arguments optionnels</h2>
+
+<pre>def f(x, y, z=3, L=[], t=True):
+    ...</pre>
+
+<div class="warn-box"><b>⚠ RÈGLE ABSOLUE :</b> Les arguments optionnels (avec valeur par défaut) doivent TOUJOURS être placés <b>après</b> les arguments obligatoires.<br><br>
+<code>def f(z=3, x):</code> → <b>SyntaxError: non-default argument follows default argument</b></div>
+
+<h3>Appels valides et invalides</h3>
+<p>Pour <code>def f(x, y, z=3, L=[], t=True)</code> :</p>
+<table>
+<tr><th>Appel</th><th>Valide ?</th><th>Raison</th></tr>
+<tr><td><code>f(1)</code></td><td>✗</td><td>y manque (obligatoire)</td></tr>
+<tr><td><code>f(1, 3)</code></td><td>✓</td><td>x=1, y=3, reste par défaut</td></tr>
+<tr><td><code>f(y=2, x=1)</code></td><td>✓</td><td>arguments nommés</td></tr>
+<tr><td><code>f(t=False, 1, 2)</code></td><td>✗</td><td>positionnel après nommé</td></tr>
+<tr><td><code>f(1, 1, L=[3], False)</code></td><td>✗</td><td>positionnel après nommé</td></tr>
+</table>
+
+<div class="warn-box"><b>⚠ PIÈGE :</b> Un argument <b>positionnel</b> ne peut JAMAIS apparaître après un argument <b>nommé</b>.<br><code>f(x=1, 2)</code> → SyntaxError</div>
+
+<h3>Déballage dictionnaire</h3>
+<pre>d = {'x': 1, 'y': 2, 't': False}
+f(**d)    # équivaut à f(x=1, y=2, t=False)
+          # z et L gardent leurs valeurs par défaut</pre>
+
+<h2>3. Lambda — Fonctions anonymes</h2>
+<pre>f = lambda x: x ** 2           # une expression, pas de bloc
+g = lambda x, y=1: x // y + x % y   # args optionnels OK</pre>
+
+<p>Exemples de calcul :</p>
+<pre>f = lambda x, y=3, z=True: y - x if z else None
+
+f(3)            # z=True → return 3-3 = 0
+f(5, z=False)   # z=False → return None
+f(y=1, x=3)     # z=True → return 1-3 = -2
+
+g = lambda x, y=1: x // y + x % y
+g(17)           # 17//1 + 17%1 = 17+0 = 17
+g(17, 3)        # 17//3 + 17%3 = 5+2 = 7</pre>
+
+<h3>Fonction d'ordre supérieur</h3>
+<pre>F = lambda f, a, b: a + f(b) * (b - a)
+F(lambda t: t**2, 2, 4)   # 2 + (4²)×(4-2) = 2+32 = 34</pre>
+
+<h2>4. Intégration numérique — Méthode des trapèzes</h2>
+<p>Approximation de ∫<sub>a</sub><sup>b</sup> f(x) dx avec n subdivisions :</p>
+<pre>def trapezes(f, a, b, n):
+    h = (b - a) / n
+    return h * (f(a)/2 + sum(f(a+k*h) for k in range(1,n)) + f(b)/2)</pre>
+
+<div class="info-box"><b>ℹ Formule :</b> T<sub>n</sub> = h · (f(a)/2 + f(a+h) + f(a+2h) + ... + f(b-h) + f(b)/2) &nbsp; avec h = (b−a)/n</div>
+
+<nav class="nav-bottom">
+  <a href="cours4-dict.html">← Cours 4 : Dictionnaires</a>
+  <a href="cours6-recursivite.html">Cours 6 : Récursivité →</a>
+</nav>
+</div>
+</body>
+</html>

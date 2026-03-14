@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 1 — Types numériques | AP2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}
+body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}
+a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}
+.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.header .back{font-size:1.4rem;opacity:.7;transition:.2s}.header .back:hover{opacity:1;text-decoration:none}
+.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}
+.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700;transition:.2s}
+.header .quiz-link:hover{background:var(--amber2);text-decoration:none}
+.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}
+h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}
+h2:first-child{margin-top:0}
+h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}
+p{margin:8px 0;color:var(--txt2)}
+code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}
+pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}
+.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}
+.warn-box b{color:var(--red)}
+.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}
+.tip-box b{color:var(--green)}
+.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}
+.info-box b{color:var(--purple)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}
+th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}
+td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}
+tr:hover td{background:rgba(245,158,11,.03)}
+.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}
+.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}
+.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}
+@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem;padding:12px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="index.html" class="back">←</a>
+  <h1>Cours 1 — Types numériques</h1>
+  <a href="module1-types-numeriques.html" class="quiz-link">→ Quiz (20 questions)</a>
+</div>
+<div class="container">
+
+<h2>1. int — Entiers à précision arbitraire</h2>
+
+<p>Contrairement à C ou Java, les entiers Python n'ont <b>aucune limite de taille</b>. On peut manipuler des nombres de milliers de chiffres.</p>
+
+<h3>Bases de numération</h3>
+<table>
+<tr><th>Base</th><th>Préfixe</th><th>Exemple</th><th>Conversion</th></tr>
+<tr><td>Binaire (2)</td><td><code>0b</code></td><td><code>0b1010</code> = 10</td><td><code>bin(10)</code> → <code>'0b1010'</code></td></tr>
+<tr><td>Octal (8)</td><td><code>0o</code></td><td><code>0o17</code> = 15</td><td><code>oct(15)</code> → <code>'0o17'</code></td></tr>
+<tr><td>Hexadécimal (16)</td><td><code>0x</code></td><td><code>0x1f</code> = 31</td><td><code>hex(31)</code> → <code>'0x1f'</code></td></tr>
+</table>
+
+<div class="warn-box"><b>⚠ Attention :</b> <code>bin()</code>, <code>oct()</code>, <code>hex()</code> renvoient des <b>chaînes</b> (type <code>str</code>), pas des nombres. <code>type(0b1010)</code> reste <code>int</code> — le préfixe n'est qu'une notation.</div>
+
+<p>Conversion inverse : <code>int('ff', 16)</code> → 255, <code>int('111', 2)</code> → 7.</p>
+
+<h3>Opérations mixtes str/int</h3>
+<pre>bin(7) + str(0b11)    # '0b111' + '3' = '0b1113'  (concaténation !)
+int('11') - 0b11      # 11 - 3 = 8</pre>
+
+
+<h2>2. float — IEEE 754 double précision</h2>
+
+<p>Un float occupe 64 bits : 1 bit de signe, 11 bits d'exposant, 52 bits de mantisse. Cela donne environ <b>16 chiffres significatifs</b>.</p>
+
+<h3>Arrondis — Les 4 fonctions</h3>
+<table>
+<tr><th>Fonction</th><th>Comportement</th><th>Exemple positif</th><th>Exemple négatif</th></tr>
+<tr><td><code>int(x)</code></td><td>Troncature vers <b>zéro</b></td><td><code>int(3.7)</code> = 3</td><td><code>int(-3.7)</code> = <b>−3</b></td></tr>
+<tr><td><code>math.floor(x)</code></td><td>Vers <b>−∞</b></td><td><code>floor(3.7)</code> = 3</td><td><code>floor(-3.7)</code> = <b>−4</b></td></tr>
+<tr><td><code>math.ceil(x)</code></td><td>Vers <b>+∞</b></td><td><code>ceil(3.7)</code> = 4</td><td><code>ceil(-3.7)</code> = −3</td></tr>
+<tr><td><code>round(x)</code></td><td>Plus proche (banker)</td><td><code>round(3.5)</code> = 4</td><td><code>round(-3.7)</code> = −4</td></tr>
+</table>
+
+<div class="warn-box"><b>⚠ PIÈGE CLASSIQUE :</b> Pour les nombres <b>positifs</b>, <code>int()</code> et <code>floor()</code> donnent le même résultat. La différence n'apparaît qu'avec les <b>négatifs</b> :<br><code>math.floor(-2.1) - int(-2.1)</code> = −3 − (−2) = <b>−1</b></div>
+
+<h3>Précision et epsilon machine</h3>
+<p>La mantisse de 52 bits impose des limites :</p>
+<table>
+<tr><th>Seuil</th><th>Valeur</th><th>Signification</th></tr>
+<tr><td>Epsilon machine y</td><td>2<sup>−52</sup> ≈ 2.22 × 10<sup>−16</sup></td><td>Plus petit 2<sup>k</sup> tel que <code>1 + y ≠ 1</code></td></tr>
+<tr><td>Seuil entier x</td><td>2<sup>53</sup> ≈ 9 × 10<sup>15</sup></td><td>Plus petit 2<sup>k</sup> tel que <code>x + 1 == x</code></td></tr>
+</table>
+<p>Relation fondamentale : x × y = 1</p>
+
+<div class="warn-box"><b>⚠ PIÈGE :</b> <code>1 + 1e-16 - 1</code> vaut <code>0.0</code>, pas <code>1e-16</code>. L'addition arrondit <code>1 + 1e-16</code> à <code>1.0</code> car 10<sup>−16</sup> &lt; ε/2.</div>
+
+<h3>Valeurs spéciales</h3>
+<pre>float('inf')        # infini positif
+1e308 * 10          # inf (dépassement vers infini)
+float(3**1000)      # OverflowError ! (trop grand pour un float)</pre>
+
+
+<h2>3. complex — Nombres complexes</h2>
+
+<p>Le suffixe <code>j</code> (pas <code>i</code>) désigne l'unité imaginaire. <code>2j</code> est un littéral complexe, indépendant de toute variable <code>j</code>.</p>
+
+<pre>z = 3 + 4j
+z.real               # 3.0  (attribut, PAS une fonction)
+z.imag               # 4.0
+abs(z)               # 5.0  (module |z| = √(9+16))
+import cmath
+cmath.phase(z)       # argument de z (en radians)
+z ** 0.5             # racine carrée complexe</pre>
+
+<div class="warn-box"><b>⚠ PIÈGE :</b> <code>real(z)</code> n'existe PAS en Python ! C'est <code>z.real</code> (attribut sans parenthèses). <code>z.real()</code> avec parenthèses donnerait <code>TypeError</code> car un float n'est pas callable.</div>
+
+<div class="info-box"><b>ℹ Identité d'Euler numérique :</b> <code>cmath.exp(1j * math.pi)</code> renvoie ≈ <code>(-1+1.2e-16j)</code>, soit −1 à la précision machine près.</div>
+
+<h3>Piège variable j vs littéral j</h3>
+<pre>j = 1               # variable j = 1
+(1 + 2j) ** 2       # 2j est un LITTÉRAL (pas 2*j)
+                     # = (1+2j)² = 1 + 4j - 4 = -3+4j</pre>
+
+
+<h2>4. Racine carrée entière — Pourquoi la dichotomie</h2>
+
+<p>La méthode naïve <code>int(n**0.5)</code> est <b>incorrecte pour les grands entiers</b> :</p>
+<table>
+<tr><th>Cas</th><th>Problème</th></tr>
+<tr><td><code>n = 3**100</code></td><td>Résultat incorrect (arrondi float)</td></tr>
+<tr><td><code>n = 3**1000</code></td><td><code>OverflowError</code> (pas convertible en float)</td></tr>
+</table>
+
+<h3>Solution : dichotomie entière</h3>
+<pre>def intsqrt(n):
+    a, b = 0, n
+    while b - a > 1:
+        m = (a + b) // 2
+        if m * m <= n:
+            a = m
+        else:
+            b = m
+    assert a * a <= n < (a + 1) ** 2
+    return a</pre>
+
+<div class="tip-box"><b>✓ Avantages :</b> Calcul 100% entier (pas de conversion float), correct pour tout n, complexité O(log n).</div>
+
+
+<nav class="nav-bottom">
+  <a href="index.html">← Accueil</a>
+  <a href="cours2-tuple-frozenset.html">Cours 2 : Tuple & Frozenset →</a>
+</nav>
+</div>
+</body>
+</html>

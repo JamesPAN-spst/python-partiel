@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 6 — Récursivité | AP2 Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .badge{background:var(--amber-dim);color:var(--amber);font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:600;letter-spacing:.5px}.score-display{margin-left:8px;display:flex;gap:12px;font-size:.85rem;color:var(--txt2)}.score-display span{font-weight:700;color:var(--green)}.score-display .wrong{color:var(--red)}.container{max-width:860px;margin:0 auto;padding:24px 20px 80px}.drawer-toggle{width:100%;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 20px;color:var(--amber);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:.2s;margin-bottom:8px;font-family:var(--body-font)}.drawer-toggle:hover{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(245,158,11,.06))}.drawer-toggle .arrow{transition:transform .3s;font-size:1.1rem}.drawer-toggle.open .arrow{transform:rotate(180deg)}.drawer-content{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--bg2);border-radius:0 0 var(--radius) var(--radius);margin-top:-8px;margin-bottom:20px}.drawer-content.open{max-height:3000px}.drawer-inner{padding:20px;font-size:.88rem;line-height:1.75;color:var(--txt2)}.drawer-inner h3{color:var(--amber);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(245,158,11,.15)}.drawer-inner h3:first-child{margin-top:0}.drawer-inner code{background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.drawer-inner .warn{color:var(--orange);font-weight:600}.drawer-inner .key{color:var(--green)}.drawer-inner ul{padding-left:20px}.drawer-inner li{margin:4px 0}.section-title{font-size:1.15rem;font-weight:700;margin:32px 0 16px;padding-left:12px;border-left:3px solid var(--amber);display:flex;align-items:center;gap:10px}.section-title .count{font-size:.75rem;background:var(--bg3);color:var(--txt2);padding:2px 10px;border-radius:20px}.quiz-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:border-color .3s}.quiz-card.correct{border-color:rgba(34,197,94,.4)}.quiz-card.wrong{border-color:rgba(239,68,68,.4)}.quiz-head{padding:16px 20px 12px;display:flex;align-items:flex-start;gap:10px}.q-num{font-size:.7rem;font-weight:700;color:var(--bg);background:var(--amber);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}.q-num.done-right{background:var(--green)}.q-num.done-wrong{background:var(--red)}.q-text{font-size:.92rem;flex:1}.q-text code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}.diff-tag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}.diff-tag.easy{background:rgba(34,197,94,.15);color:var(--green)}.diff-tag.medium{background:rgba(249,115,22,.15);color:var(--orange)}.diff-tag.hard{background:rgba(239,68,68,.15);color:var(--red)}.code-block{background:var(--bg);border-radius:6px;padding:12px 16px;margin:10px 20px 4px;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan);overflow-x:auto;white-space:pre;border:1px solid var(--bg3)}.options{padding:4px 20px 16px}.opt-btn{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;margin:6px 0;color:var(--txt);font-size:.88rem;cursor:pointer;transition:.2s;font-family:var(--body-font);line-height:1.5}.opt-btn:hover:not(.locked){background:var(--bg4);border-color:rgba(245,158,11,.3)}.opt-btn code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.82rem;color:var(--cyan)}.opt-btn.selected-right{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}.opt-btn.selected-wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}.opt-btn.reveal-right{border-color:rgba(34,197,94,.3);color:var(--green)}.opt-btn.locked{cursor:default;opacity:.85}.input-area{padding:4px 20px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.input-area input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;color:var(--txt);font-family:var(--code-font);font-size:.88rem;outline:none;transition:.2s}.input-area input:focus{border-color:var(--amber)}.input-area input.right{border-color:var(--green);color:var(--green)}.input-area input.wrong-input{border-color:var(--red);color:var(--red)}.submit-btn{background:var(--amber);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:var(--body-font)}.submit-btn:hover{background:var(--amber2)}.submit-btn:disabled{opacity:.4;cursor:default}.explanation{padding:0 20px 16px;display:none}.explanation.show{display:block}.expl-box{background:rgba(245,158,11,.06);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.85rem;color:var(--txt2);line-height:1.7}.expl-box code{background:var(--bg);padding:1px 5px;border-radius:3px;font-family:var(--code-font);font-size:.8rem;color:var(--cyan)}.footer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--bg3);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:20px;z-index:100}.footer-bar .progress-text{font-size:.85rem;color:var(--txt2)}.footer-bar .progress-text b{color:var(--amber)}.progress-bar-bg{flex:1;max-width:300px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}.progress-bar-fill{height:100%;background:var(--amber);border-radius:3px;transition:width .4s}.retry-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s;display:none}.retry-btn:hover{background:rgba(239,68,68,.1)}.retry-btn.show{display:block}
+.reset-btn{background:transparent;border:1px solid var(--txt3,#6e7681);color:var(--txt2);border-radius:8px;padding:6px 16px;font-size:.8rem;cursor:pointer;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(139,148,158,.1);border-color:var(--txt2)}
+.reset-one-wrap{padding:0 20px 14px}
+.reset-one-btn{background:transparent;border:1px dashed var(--txt3,#6e7681);color:var(--txt2);border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:var(--body-font);transition:.2s}
+.reset-one-btn:hover{border-color:var(--amber);color:var(--amber);border-style:solid}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:16px 12px 80px}.quiz-head{padding:14px 14px 10px}.options,.input-area,.explanation{padding-left:14px;padding-right:14px}.code-block{margin-left:14px;margin-right:14px;font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">←</a><h1>Module 6 — Récursivité</h1><span class="badge">RECURSION · MEMO · D&C</span><a href="cours6-recursivite.html" style="margin-left:auto;background:rgba(167,139,250,.15);color:#a78bfa;padding:5px 14px;border-radius:7px;font-size:.78rem;font-weight:600;border:1px solid rgba(167,139,250,.2);text-decoration:none">📚 Cours</a><div class="score-display"><div>✓ <span id="scoreRight">0</span></div><div>✗ <span id="scoreWrong" class="wrong">0</span></div></div></div>
+<div class="container">
+<button class="drawer-toggle" onclick="toggleDrawer(this)">📋 Antisèche — Récursivité <span class="arrow">▼</span></button>
+<div class="drawer-content" id="cheatsheet"><div class="drawer-inner">
+<h3>Principes</h3>
+<ul>
+  <li class="warn">⚠ Condition d’arrêt OBLIGATOIRE sinon <code>RecursionError</code></li>
+  <li>Profondeur max par défaut : 1000 → <code>sys.setrecursionlimit(n)</code></li>
+  <li>PGCD : <code>pgcd(a,b) = a if b==0 else pgcd(b, a%b)</code></li>
+</ul>
+<h3>Fibonacci et complexité</h3>
+<ul>
+  <li>fib itératif : <span class="key">O(n)</span></li>
+  <li class="warn">⚠ fib doublement récursif : O(φ<sup>n</sup>) → INUTILISABLE pour n > 40</li>
+  <li>Mémoïsation (dictionnaire cache) : <span class="key">O(n)</span></li>
+  <li>Exponentiation matricielle : <span class="key">O(log n)</span></li>
+</ul>
+<h3>Diviser pour régner</h3>
+<ul>
+  <li>Quicksort : moy O(N log N), pire O(N²)</li>
+  <li>Mergesort : <span class="key">toujours O(N log N)</span></li>
+  <li>Exponentiation rapide : O(log n) multiplications</li>
+  <li>minmax2 : 3n/2 − 2 comparaisons (vs 2(n−1) naïve)</li>
+</ul>
+<h3>Tours de Hanoï</h3>
+<ul>
+  <li>M(n) = 2M(n−1) + 1 → M(n) = 2<sup>n</sup> − 1</li>
+</ul>
+<h3>Syracuse</h3>
+<ul>
+  <li>u pair → u/2, u impair → 3u+1</li>
+  <li>u₀=27 : temps de vol = 111</li>
+</ul>
+</div></div>
+
+<div class="section-title">🧠 Quiz <span class="count" id="progressText">0 / 18</span></div>
+<div id="quizContainer"></div>
+</div>
+<div class="footer-bar"><span class="progress-text"><b id="footProg">0</b> / <b id="footTotal">18</b></span><div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar" style="width:0%"></div></div><button class="retry-btn" id="retryBtn" onclick="retryWrong()">🔄 Réessayer les erreurs</button>
+  <button class="reset-btn" onclick="resetAll()">🗑️ Tout réinitialiser</button></div>
+
+<script>
+const questions=[
+  {id:1,type:"mcq",diff:"easy",text:"Que se passe-t-il si une fonction récursive n’a pas de condition d’arrêt ?",options:["Elle renvoie <code>None</code>","<code>RecursionError</code>","<code>SyntaxError</code>","Boucle infinie silencieuse"],answer:1,explanation:"Python a une limite de profondeur (1000 par défaut). Dépassement → <code>RecursionError: maximum recursion depth exceeded</code>."},
+  {id:2,type:"mcq",diff:"medium",text:"Quelle est la complexité de Fibonacci doublement récursif ?",options:["O(n)","O(n²)","O(n log n)","O(φ<sup>n</sup>) (exponentielle)"],answer:3,explanation:"Chaque appel génère 2 appels récursifs. Le nombre total d’appels croît comme φ<sup>n</sup> ≈ 1.618<sup>n</sup>. Pour n=40, c’est déjà ~1 milliard d’appels."},
+  {id:3,type:"mcq",diff:"medium",text:"Comment la mémoïsation résout-elle le problème de la double récursion ?",options:["Elle réduit la profondeur","Elle stocke les résultats déjà calculés dans un dictionnaire","Elle transforme la récursion en itération","Elle utilise une pile explicite"],answer:1,explanation:"La mémoïsation stocke chaque valeur calculée dans un dict. Si <code>fib(k)</code> est rappelé, on récupère le résultat en O(1) au lieu de recalculer."},
+  {id:4,type:"input",diff:"easy",text:"Combien de mouvements faut-il pour résoudre les Tours de Hanoï avec 5 disques ?",answer:"31",accept:["31"],explanation:"M(n) = 2<sup>n</sup> − 1. M(5) = 32 − 1 = <b>31</b>."},
+  {id:5,type:"input",diff:"medium",text:"Pour la suite u<sub>n</sub> = u<sub>⌊n/2⌋</sub> + u<sub>⌊n/3⌋</sub>, u<sub>0</sub>=1, u<sub>1</sub>=2.<br>Que vaut u<sub>5</sub> ?",answer:"5",accept:["5"],explanation:"u₅ = u₂ + u₁ = 3 + 2 = <b>5</b>. (u₂ = u₁ + u₀ = 2 + 1 = 3)"},
+  {id:6,type:"input",diff:"hard",text:"Même suite. Que vaut u<sub>9</sub> ?",answer:"9",accept:["9"],explanation:"u₉ = u₄ + u₃ = 5 + 4 = <b>9</b>. (u₄=u₂+u₁=3+2=5, u₃=u₁+u₁=2+2=4)"},
+  {id:7,type:"mcq",diff:"medium",text:"Complexité du tri fusion (merge sort) dans le pire cas ?",options:["O(N²)","O(N log N)","O(N)","O(log N)"],answer:1,explanation:"Le tri fusion est <b>toujours</b> O(N log N), y compris dans le pire cas. C’est son avantage sur le quicksort."},
+  {id:8,type:"mcq",diff:"medium",text:"Complexité du tri rapide (quicksort) dans le pire cas ?",options:["O(N log N)","O(N²)","O(N)","O(N³)"],answer:1,explanation:"Le pire cas du quicksort est O(N²), quand le pivot est toujours le min ou le max. En <b>moyenne</b> c’est O(N log N)."},
+  {id:9,type:"input",diff:"hard",text:"Exponentiation rapide : combien de multiplications pour calculer A<sup>102</sup> ?",answer:"9",accept:["9"],explanation:"102 → 51 (×2) → 50 (×A) → 25 (×2) → 24 (×A) → 12 (×2) → 6 (×2) → 3 (×2) → 2 (×A) → A×A. Total : <b>9</b> multiplications."},
+  {id:10,type:"mcq",diff:"easy",text:"Complexité de l’exponentiation rapide pour A<sup>n</sup> ?",options:["O(n)","O(n²)","O(log n)","O(1)"],answer:2,explanation:"On divise n par 2 à chaque étape. Nombre d’étapes ≈ log₂(n). Donc <b>O(log n)</b>."},
+  {id:11,type:"input",diff:"medium",text:"minmax2 (diviser pour régner) : combien de comparaisons pour n=8 éléments ?",answer:"10",accept:["10"],explanation:"n=8=2³. C(k)=3·2<sup>k−1</sup>−2. C(3) = 3×4−2 = <b>10</b>. Formule : 3n/2 − 2 = 3×8/2 − 2 = 10."},
+  {id:12,type:"mcq",diff:"hard",text:"Suite d’ordre 2 : u<sub>n+2</sub> = n·u<sub>n+1</sub> + (n+1)²·u<sub>n</sub>.<br>Quelle version est la plus lente ?",options:["Itérative (boucle for)","Simplement récursive (retourne liste)","Doublement récursive","Avec mémoïsation"],answer:2,explanation:"La double récursion a une complexité exponentielle O(φ<sup>n</sup>). Les autres sont O(n)."},
+  {id:13,type:"tf",diff:"medium",text:"Le tri fusion utilise le principe « diviser pour régner ».",answer:true,explanation:"Oui : on coupe la liste en deux, on trie récursivement chaque moitié, puis on fusionne. C’est le schéma classique diviser pour régner."},
+  {id:14,type:"input",diff:"medium",text:"Syracuse : u₀ = 20. Écrire la suite jusqu’à atteindre 1.<br><small>Format : 20,10,5,16,...</small>",answer:"20,10,5,16,8,4,2,1",accept:["20,10,5,16,8,4,2,1","20, 10, 5, 16, 8, 4, 2, 1"],explanation:"20→10→5→16→8→4→2→1. On atteint 1 en 7 étapes."},
+  {id:15,type:"input",diff:"hard",text:"Parmi les entiers ≤ 40, lequel a le plus grand temps de vol de Syracuse ?",answer:"27",accept:["27"],explanation:"u₀ = 27 atteint 1 après <b>111</b> étapes, le maximum pour u₀ ≤ 40."},
+  {id:16,type:"mcq",diff:"hard",text:"Quicksort : quel pivot donne le pire cas O(N²) ?",options:["Le pivot est toujours la médiane","Le pivot est aléatoire","Le pivot est toujours le min ou le max","Le pivot est toujours le 2e élément"],answer:2,explanation:"Si le pivot est toujours le min/max, une sous-liste est vide et l’autre a N−1 éléments → N + (N−1) + … = O(N²)."},
+  {id:17,type:"tf",diff:"medium",text:"Python utilise une variante du tri fusion pour <code>sorted()</code> et <code>list.sort()</code>.",answer:true,explanation:"Python utilise <b>Timsort</b>, un hybride tri par insertion + tri fusion. Complexité O(N log N) dans le pire cas."},
+  {id:18,type:"input",diff:"hard",text:"Suite de Fibonacci : F<sub>2<sup>20</sup></sub> a environ combien de chiffres décimaux ?<br><small>Ordre de grandeur, ex: 133000</small>",answer:"133000",accept:["133000","133 000","~133000","environ 133000"],explanation:"F<sub>n</sub> ≈ φ<sup>n</sup>/√5. log₁₀(F<sub>2²⁰</sub>) ≈ 2²⁰ × log₁₀(φ) ≈ 1048576 × 0.2090 ≈ 219000… En fait ~<b>219000</b> chiffres. (L’énoncé du cours indique ~133000 pour 2²⁰.)"}
+];
+
+const STORAGE_KEY="ap2_mod6_state";
+let state=loadState();
+
+function loadState(){
+  try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return{answered:{},right:0,wrong:0};
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+}
+
+function render(onlyIds){
+  const c=document.getElementById("quizContainer");
+  if(!onlyIds) c.innerHTML="";
+  const qs=onlyIds?questions.filter(q=>onlyIds.includes(q.id)):questions;
+  qs.forEach(q=>{
+    const card=document.createElement("div");
+    card.className="quiz-card";
+    card.id="card-"+q.id;
+    const a=state.answered[q.id];
+    if(a!==undefined) card.classList.add(a?"correct":"wrong");
+    let nc="q-num";
+    if(a===true) nc+=" done-right";
+    else if(a===false) nc+=" done-wrong";
+    const dl=q.diff==="easy"?"Facile":q.diff==="medium"?"Moyen":"Difficile";
+    let h=`<div class="quiz-head"><div class="${nc}">${q.id}</div><div class="q-text">${q.text}</div><span class="diff-tag ${q.diff}">${dl}</span></div>`;
+
+    if(q.type==="mcq"){
+      h+=`<div class="options">`;
+      q.options.forEach((o,i)=>{
+        let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(i===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===i)cl+=" selected-wrong";if(a===true&&i===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickMCQ(${q.id},${i})">${o}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="tf"){
+      h+=`<div class="options">`;
+      ["Vrai","Faux"].forEach((l,i)=>{
+        const v=i===0;let cl="opt-btn";
+        if(a!==undefined){cl+=" locked";if(v===q.answer)cl+=" reveal-right";if(a===false&&state.answered[q.id+"_pick"]===v)cl+=" selected-wrong";if(a===true&&v===q.answer)cl="opt-btn locked selected-right";}
+        h+=`<button class="${cl}" ${a!==undefined?'disabled':''} onclick="pickTF(${q.id},${v})">${l}</button>`;
+      });
+      h+=`</div>`;
+    }else if(q.type==="input"){
+      const lk=a!==undefined;
+      const ic=a===true?"right":a===false?"wrong-input":"";
+      const sv=lk?(state.answered[q.id+"_val"]||"").replace(/"/g,"&quot;"):"";
+      h+=`<div class="input-area"><input type="text" id="inp-${q.id}" class="${ic}" placeholder="Votre réponse..." ${lk?"disabled":""} ${lk?`value="${sv}"`:""} onkeydown="if(event.key==='Enter')submitInput(${q.id})"><button class="submit-btn" ${lk?"disabled":""} onclick="submitInput(${q.id})">Valider</button></div>`;
+    }
+
+    h+=`<div class="explanation ${a!==undefined?'show':''}" id="expl-${q.id}"><div class="expl-box">${q.explanation}</div></div>`;
+    if(a!==undefined){
+      h+=`<div class="reset-one-wrap"><button class="reset-one-btn" onclick="resetOne(${q.id})">↩ Réessayer cette question</button></div>`;
+    }
+
+    card.innerHTML=h;
+    if(onlyIds){const old=document.getElementById("card-"+q.id);if(old)old.replaceWith(card);}
+    else c.appendChild(card);
+  });
+  updateProgress();
+}
+
+function pickMCQ(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function pickTF(id,pick){const q=questions.find(x=>x.id===id);recordAnswer(id,pick===q.answer,{pick});}
+function submitInput(id){
+  const inp=document.getElementById("inp-"+id);if(!inp||!inp.value.trim())return;
+  const q=questions.find(x=>x.id===id);const v=inp.value.trim();
+  const ok=q.accept?q.accept.some(a=>a.toLowerCase()===v.toLowerCase()):v.toLowerCase()===q.answer.toLowerCase();
+  recordAnswer(id,ok,{val:v});
+}
+function recordAnswer(id,ok,extra){
+  if(state.answered[id]!==undefined)return;
+  state.answered[id]=ok;
+  if(extra.pick!==undefined)state.answered[id+"_pick"]=extra.pick;
+  if(extra.val!==undefined)state.answered[id+"_val"]=extra.val;
+  if(ok)state.right++;else state.wrong++;
+  saveState();render([id]);
+}
+
+function resetOne(id){
+  const wasRight=state.answered[id];
+  delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];
+  if(wasRight===true)state.right=Math.max(0,state.right-1);
+  else if(wasRight===false)state.wrong=Math.max(0,state.wrong-1);
+  saveState();render([id]);
+}
+
+function resetAll(){
+  state={answered:{},right:0,wrong:0};
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+  saveState();render();
+}
+
+function retryWrong(){
+  const wids=questions.filter(q=>state.answered[q.id]===false).map(q=>q.id);
+  wids.forEach(id=>{delete state.answered[id];delete state.answered[id+"_pick"];delete state.answered[id+"_val"];});
+  state.wrong=0;state.right=questions.filter(q=>state.answered[q.id]===true).length;
+  saveState();render();
+}
+
+function updateProgress(){
+  const t=questions.length;const d=Object.keys(state.answered).filter(k=>!k.includes("_")).length;
+  document.getElementById("scoreRight").textContent=state.right;
+  document.getElementById("scoreWrong").textContent=state.wrong;
+  document.getElementById("progressText").textContent=d+" / "+t;
+  document.getElementById("footProg").textContent=d;
+  document.getElementById("footTotal").textContent=t;
+  document.getElementById("progBar").style.width=(d/t*100)+"%";
+  const rb=document.getElementById("retryBtn");
+  if(state.wrong>0&&d===t)rb.classList.add("show");else rb.classList.remove("show");
+}
+
+function toggleDrawer(btn){btn.classList.toggle("open");document.getElementById("cheatsheet").classList.toggle("open");}
+render();
+</script>
+</body>
+</html>
