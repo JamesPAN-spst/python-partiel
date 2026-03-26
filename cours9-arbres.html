@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 9 — Arbres | AP2</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}.extra-box{background:rgba(6,182,212,.06);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.extra-box b{color:var(--cyan)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">&larr;</a><h1>Cours 9 — Arbres</h1><a href="module9-arbres.html" class="quiz-link">&rarr; Quiz (18 questions)</a></div>
+<div class="container">
+
+<h2>1. Definition d'un arbre</h2>
+
+<h3>Definition iterative</h3>
+<p>Un <b>arbre</b> est une structure de donnees hierarchique constituee de <b>noeuds</b>. A l'exception d'un noeud special appele <b>racine</b>, chaque noeud a un unique <b>parent</b>. Un noeud peut avoir 0 ou plusieurs <b>enfants</b>. Un noeud sans enfant est une <b>feuille</b>.</p>
+
+<h3>Definition recursive</h3>
+<p>Un arbre est soit <b>vide</b>, soit constitue d'un noeud (la racine) dont les enfants sont eux-memes des arbres.</p>
+
+<h3>Vocabulaire essentiel</h3>
+<table>
+<tr><th>Terme</th><th>Definition</th></tr>
+<tr><td><b>Racine</b></td><td>Noeud sans parent (sommet de l'arbre)</td></tr>
+<tr><td><b>Feuille</b></td><td>Noeud sans enfant</td></tr>
+<tr><td><b>Noeud interne</b></td><td>Noeud qui n'est pas une feuille</td></tr>
+<tr><td><b>Branche</b></td><td>Lien entre un noeud et son parent</td></tr>
+<tr><td><b>Profondeur</b></td><td>Nombre de branches entre le noeud et la racine</td></tr>
+<tr><td><b>Hauteur</b></td><td>Profondeur maximale des noeuds (donc des feuilles)</td></tr>
+<tr><td><b>Taille</b></td><td>Nombre total de noeuds</td></tr>
+<tr><td><b>Etiquette</b></td><td>Information stockee dans un noeud (son "nom")</td></tr>
+<tr><td><b>Arbre ordonne</b></td><td>Les enfants sont numerotes (gauche, droite...)</td></tr>
+</table>
+
+<h2>2. Implementation Python</h2>
+<p>Chaque noeud est une liste : <code>[etiquette, enfant1, enfant2, ...]</code></p>
+
+<pre>def creer_noeud(e, L):   # etiquette x liste d'enfants -> noeud
+    return [e] + L
+
+def etiquette(N):         # noeud -> etiquette
+    return N[0]
+
+def enfants(N):           # noeud -> liste de noeuds
+    return N[1:]
+
+def creer_arbre(N):       # noeud -> arbre (identifie avec sa racine)
+    return N
+
+def racine(A):            # arbre -> noeud
+    return A</pre>
+
+<h3>Exemple</h3>
+<pre># Construction de l'arbre :
+#       X
+#      /|\
+#     A  R  B
+#          / \
+#         U   M
+
+U = creer_noeud('U', [])
+M = creer_noeud('M', [])
+B = creer_noeud('B', [U, M])
+A = creer_noeud('A', [])
+R = creer_noeud('R', [])
+X = creer_noeud('X', [A, R, B])
+a = creer_arbre(X)
+
+# Resultat : ['X', ['A'], ['R'], ['B', ['U'], ['M']]]</pre>
+
+<h2>3. Parcours en profondeur (DFS)</h2>
+<p>Le parcours en profondeur explore recursivement tous les enfants avant de passer au noeud suivant.</p>
+
+<pre>def explore(N):
+    # Parcours en profondeur du sous-arbre de racine N
+    print(etiquette(N))    # traiter le noeud
+    for E in enfants(N):
+        explore(E)</pre>
+
+<h3>Fonctions classiques</h3>
+<pre>def taille(N):
+    # Nombre de noeuds du sous-arbre de racine N
+    T = 1                  # compte le noeud N
+    for E in enfants(N):
+        T += taille(E)
+    return T
+
+def hauteur(N):
+    # Hauteur du sous-arbre de racine N
+    T = 0
+    for E in enfants(N):
+        T = max(T, hauteur(E) + 1)
+    return T</pre>
+
+<div class="tip-box"><b>&#9989; Astuce :</b> Pour un arbre a n noeuds, le parcours en profondeur a une complexite O(n) — chaque noeud est visite exactement une fois.</div>
+
+<h2>4. Parcours en largeur (BFS)</h2>
+<p>Le parcours en largeur explore tous les noeuds d'une profondeur donnee avant de passer a la profondeur suivante. On utilise une <b>file</b> :</p>
+
+<pre>def parcours_largeur(A):
+    F = [racine(A)]          # file initialisee avec la racine
+    while len(F) > 0:
+        N = F.pop(0)         # extraire le premier
+        print(etiquette(N))  # traiter
+        for E in enfants(N):
+            F.append(E)      # ajouter les enfants a la file</pre>
+
+<div class="info-box"><b>&#128161; BFS vs DFS :</b> Le parcours en largeur utilise une <b>file</b> (FIFO), le parcours en profondeur utilise implicitement une <b>pile</b> (LIFO, via la recursion). Remplacer la file par une pile dans le BFS donne un DFS iteratif !</div>
+
+<h2>5. Applications des arbres</h2>
+<p>Les arbres servent a modeliser de nombreuses structures :</p>
+<table>
+<tr><th>Application</th><th>Exemple</th></tr>
+<tr><td>Systeme de fichiers</td><td>Repertoires et fichiers</td></tr>
+<tr><td>Expressions algebriques</td><td><code>(-1-f(a,b)/cos(x^2))*sin(x)</code></td></tr>
+<tr><td>Arbre de decision</td><td>Classification d'un nombre (rationnel, irrationnel...)</td></tr>
+<tr><td>Arbre des appels recursifs</td><td>Visualiser <code>fib(5)</code></td></tr>
+<tr><td>DOM HTML</td><td>Structure d'une page web</td></tr>
+<tr><td>Parsing</td><td>Arbre syntaxique d'un compilateur</td></tr>
+</table>
+
+<h3>Expression algebrique en arbre</h3>
+<p>L'expression <code>(-1-f(a,b)/cos(x^2))*sin(x)</code> se represente par un arbre ou les noeuds internes sont des operateurs et les feuilles des variables/nombres. Cela facilite la simplification, la derivation et l'evaluation.</p>
+
+<h2>6. Contenu avance (hors programme)</h2>
+
+<div class="extra-box"><b>&#127891; Arbres binaires :</b> Un arbre binaire est un arbre ou chaque noeud a au plus 2 enfants (gauche et droite). C'est la structure la plus etudiee en informatique.</div>
+
+<h3>Arbres binaires de recherche (BST)</h3>
+<p>Un <b>BST</b> est un arbre binaire ou, pour chaque noeud N :</p>
+<p>- Tous les noeuds du sous-arbre gauche ont une etiquette &lt; etiquette(N)</p>
+<p>- Tous les noeuds du sous-arbre droit ont une etiquette &gt; etiquette(N)</p>
+
+<pre># Recherche dans un BST : O(log n) en moyenne
+def recherche_bst(N, x):
+    if N is None:
+        return False
+    if x == etiquette(N):
+        return True
+    elif x < etiquette(N):
+        return recherche_bst(gauche(N), x)
+    else:
+        return recherche_bst(droite(N), x)</pre>
+
+<div class="extra-box"><b>&#127891; Parcours infixe d'un BST :</b> Le parcours infixe (gauche, racine, droite) d'un BST produit les elements dans l'ordre croissant. C'est la base du tri par arbre.</div>
+
+<h3>Trois ordres de parcours d'un arbre binaire</h3>
+<table>
+<tr><th>Ordre</th><th>Visite</th><th>Utilisation</th></tr>
+<tr><td><b>Prefixe</b> (pre-order)</td><td>Racine, Gauche, Droite</td><td>Copie d'arbre, notation polonaise</td></tr>
+<tr><td><b>Infixe</b> (in-order)</td><td>Gauche, Racine, Droite</td><td>Tri (BST), expressions infixes</td></tr>
+<tr><td><b>Postfixe</b> (post-order)</td><td>Gauche, Droite, Racine</td><td>Liberation memoire, RPN</td></tr>
+</table>
+
+<h3>Tas (Heap)</h3>
+<p>Un <b>tas max</b> est un arbre binaire complet ou chaque noeud a une etiquette >= celles de ses enfants. Le maximum est toujours a la racine. Utilise pour les files de priorite et le tri par tas (heapsort). En Python : <code>heapq</code> (min-heap).</p>
+
+<div class="extra-box"><b>&#127891; Complexites comparees :</b>
+<table>
+<tr><th>Operation</th><th>Liste</th><th>BST equilibre</th><th>Tas</th></tr>
+<tr><td>Recherche</td><td>O(n)</td><td>O(log n)</td><td>O(n)</td></tr>
+<tr><td>Insertion</td><td>O(1)</td><td>O(log n)</td><td>O(log n)</td></tr>
+<tr><td>Suppression min/max</td><td>O(n)</td><td>O(log n)</td><td>O(log n)</td></tr>
+</table>
+</div>
+
+<div class="nav-bottom"><a href="cours8-files-piles.html">&larr; Cours precedent</a><a href="cours10-graphes.html">Cours suivant &rarr;</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 8 — Files et Piles | AP2</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}.extra-box{background:rgba(6,182,212,.06);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.extra-box b{color:var(--cyan)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">&larr;</a><h1>Cours 8 — Files et Piles</h1><a href="module8-files-piles.html" class="quiz-link">&rarr; Quiz (15 questions)</a></div>
+<div class="container">
+
+<h2>1. Files (Queues) — FIFO</h2>
+<p>Une <b>file</b> (queue) est une structure FIFO (First In, First Out) : le premier element ajoute est le premier a sortir. Pensez a une file d'attente a un guichet.</p>
+
+<table>
+<tr><th>Operation</th><th>Pseudo-code</th><th>Python (list)</th><th>Complexite</th></tr>
+<tr><td>Creer file vide</td><td><code>file_vide()</code></td><td><code>[]</code></td><td>O(1)</td></tr>
+<tr><td>Tester si vide</td><td><code>est_vide(F)</code></td><td><code>len(F)==0</code></td><td>O(1)</td></tr>
+<tr><td>Ajouter (enfiler)</td><td><code>ajouter_element(x,F)</code></td><td><code>F.append(x)</code></td><td>O(1)</td></tr>
+<tr><td>Extraire (defiler)</td><td><code>extraire_element(F)</code></td><td><code>F.pop(0)</code></td><td><b>O(n)</b></td></tr>
+<tr><td>Lire premier</td><td><code>premier_element(F)</code></td><td><code>F[0]</code></td><td>O(1)</td></tr>
+</table>
+
+<div class="warn-box"><b>&#9888; Piege performance :</b> <code>F.pop(0)</code> est O(n) car tous les elements doivent etre decales ! Pour une file performante, utilisez <code>collections.deque</code> (hors programme mais bon a savoir).</div>
+
+<pre>from collections import deque
+F = deque()
+F.append(5)      # enfiler
+F.popleft()      # defiler en O(1) !</pre>
+
+<h3>Exemple trace : simulation de file</h3>
+<pre>F = file_vide()
+ajouter_element(5, F)   # F = [5]
+ajouter_element(3, F)   # F = [5, 3]  (5 en tete)
+# tant que non vide et premier > 2:
+#   x = extraire(F)   -> x=5, F=[3]
+#   ajouter(x-1, F)   -> F=[3, 4]
+#   ajouter(x-3, F)   -> F=[3, 4, 2]
+# tour 2: x=3, F=[4, 2]
+#   ajouter(2, F) -> [4, 2, 2]
+#   ajouter(0, F) -> [4, 2, 2, 0]
+# tour 3: x=4, F=[2, 2, 0]
+#   ajouter(3, F) -> [2, 2, 0, 3]
+#   ajouter(1, F) -> [2, 2, 0, 3, 1]
+# premier_element = 2, 2 > 2 est faux -> arret
+# F = [2, 2, 0, 3, 1]</pre>
+
+<h2>2. Piles (Stacks) — LIFO</h2>
+<p>Une <b>pile</b> (stack) est une structure LIFO (Last In, First Out) : le dernier element ajoute est le premier a sortir. Pensez a une pile d'assiettes.</p>
+
+<table>
+<tr><th>Operation</th><th>Pseudo-code</th><th>Python (list)</th><th>Complexite</th></tr>
+<tr><td>Creer pile vide</td><td><code>pile_vide()</code></td><td><code>[]</code></td><td>O(1)</td></tr>
+<tr><td>Tester si vide</td><td><code>est_vide(P)</code></td><td><code>len(P)==0</code></td><td>O(1)</td></tr>
+<tr><td>Empiler</td><td><code>empiler(P, x)</code></td><td><code>P.append(x)</code></td><td>O(1)</td></tr>
+<tr><td>Depiler</td><td><code>depiler(P)</code></td><td><code>P.pop()</code></td><td>O(1)</td></tr>
+<tr><td>Lire sommet</td><td><code>sommet(P)</code></td><td><code>P[-1]</code></td><td>O(1)</td></tr>
+</table>
+
+<div class="tip-box"><b>&#9989; Avantage :</b> Toutes les operations sur les piles sont en O(1) avec une liste Python. C'est pourquoi les piles sont souvent preferees aux files pour l'implementation.</div>
+
+<h3>Piles et recursivite</h3>
+<p>Le systeme utilise une <b>pile d'appels</b> (call stack) pour gerer la recursivite. Chaque appel de fonction empile ses variables locales, et le <code>return</code> les depile.</p>
+
+<pre># Exemple : pgcd(9, 6)
+# Pile: [9,6] -> empile [6,3] -> empile [3,0]
+# return 3 -> depile -> return 3 -> depile -> return 3</pre>
+
+<div class="info-box"><b>&#128161; Hors programme — Stack overflow :</b> La pile d'appels a une taille limitee (Python : ~1000 appels par defaut). Une recursion trop profonde provoque <code>RecursionError</code>. On peut modifier la limite avec <code>sys.setrecursionlimit()</code>, mais c'est rarement une bonne idee.</div>
+
+<h2>3. Application classique : verification du parenthesage</h2>
+<p>On utilise une pile pour verifier qu'une chaine est correctement parenthesee avec <code>( )</code> et <code>[ ]</code>.</p>
+
+<pre>def bien_parenthesee(s):
+    P = []
+    for c in s:
+        if c in '([':
+            P.append(c)
+        elif c == ')':
+            if len(P) == 0 or P.pop() != '(':
+                return False
+        elif c == ']':
+            if len(P) == 0 or P.pop() != '[':
+                return False
+    return len(P) == 0</pre>
+
+<div class="extra-box"><b>&#127891; Au-dela du cours — Notation polonaise inverse (RPN) :</b> Les piles servent aussi a evaluer les expressions en notation postfixee (calculatrices HP). Par exemple, <code>3 4 + 5 *</code> se calcule : empiler 3, empiler 4, depiler et additionner (7), empiler, empiler 5, depiler et multiplier = 35.</div>
+
+<div class="nav-bottom"><a href="cours7-generateurs.html">&larr; Cours precedent</a><a href="cours9-arbres.html">Cours suivant &rarr;</a></div>
+</div>
+</body>
+</html>

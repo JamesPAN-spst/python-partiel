@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 10 — Graphes | AP2</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}.extra-box{background:rgba(6,182,212,.06);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.extra-box b{color:var(--cyan)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">&larr;</a><h1>Cours 10 — Graphes</h1><a href="module10-graphes.html" class="quiz-link">&rarr; Quiz (20 questions)</a></div>
+<div class="container">
+
+<h2>1. Definition d'un graphe</h2>
+<p>Un <b>graphe simple non oriente</b> est un couple (S, A) ou S est un ensemble de <b>sommets</b> et A un ensemble d'<b>aretes</b> reliant des paires de sommets distincts.</p>
+
+<div class="warn-box"><b>&#9888; Important :</b> Ne pas confondre le graphe avec son dessin ! Deux dessins differents peuvent representer le meme graphe.</div>
+
+<h3>Vocabulaire</h3>
+<table>
+<tr><th>Terme</th><th>Definition</th></tr>
+<tr><td><b>Ordre</b></td><td>Nombre de sommets</td></tr>
+<tr><td><b>Degre</b> d'un sommet</td><td>Nombre d'aretes incidentes a ce sommet</td></tr>
+<tr><td><b>Adjacent / Voisin</b></td><td>Deux sommets relies par une arete</td></tr>
+<tr><td><b>Regulier</b></td><td>Tous les sommets ont le meme degre</td></tr>
+<tr><td><b>Complet</b></td><td>Toutes les aretes possibles existent</td></tr>
+<tr><td><b>Connexe</b></td><td>Tout sommet est accessible depuis tout autre</td></tr>
+<tr><td><b>Chemin</b></td><td>Suite de sommets consecutivement adjacents</td></tr>
+<tr><td><b>Cycle</b></td><td>Chemin ferme dont toutes les aretes sont distinctes</td></tr>
+<tr><td><b>Acyclique</b></td><td>Ne contient aucun cycle</td></tr>
+</table>
+
+<div class="info-box"><b>&#128161; Theoreme fondamental :</b> La somme des degres de tous les sommets = 2 x nombre d'aretes (chaque arete est comptee deux fois).</div>
+
+<h2>2. Implementation Python (dictionnaire)</h2>
+<p>Un graphe est represente par un <code>dict</code> : les cles sont les sommets, les valeurs sont les ensembles (<code>set</code>) de voisins.</p>
+
+<pre>def graphe_vide():
+    return dict()
+
+def ajouter_sommet(G, s, A):
+    G[s] = A
+    for t in A:
+        if t in G:
+            G[t].add(s)
+
+def voisins(G, s):
+    return G[s]
+
+def sommets(G):
+    return G.keys()
+
+def supprimer_sommet(G, s):
+    for t in G[s]:
+        G[t].remove(s)
+    del G[s]
+
+def ajouter_arete(G, s, t):
+    G[s].add(t)
+    G[t].add(s)
+
+def supprimer_arete(G, s, t):
+    G[s].remove(t)
+    G[t].remove(s)</pre>
+
+<div class="tip-box"><b>&#9989; Complexite :</b> Avec <code>dict</code> + <code>set</code>, toutes les operations de base sont en O(1) en moyenne (grace au hachage).</div>
+
+<h2>3. Matrice d'adjacence</h2>
+<p>Un graphe d'ordre n peut etre represente par une matrice n x n ou <code>A[i][j] = 1</code> s'il existe une arete entre i et j, 0 sinon.</p>
+
+<table>
+<tr><th>Propriete</th><th>Consequence sur la matrice</th></tr>
+<tr><td>Non oriente</td><td>Matrice symetrique (<code>A[i][j] = A[j][i]</code>)</td></tr>
+<tr><td>Simple</td><td>Diagonale nulle (<code>A[i][i] = 0</code>)</td></tr>
+<tr><td>Degre du sommet i</td><td>Somme de la ligne i</td></tr>
+</table>
+
+<div class="extra-box"><b>&#127891; Theoreme puissant :</b> Le coefficient (i,j) de A<sup>k</sup> donne le nombre de chemins de longueur k entre les sommets i et j. C'est un resultat d'algebre lineaire tres utile !</div>
+
+<h2>4. Parcours en profondeur (DFS)</h2>
+<p>On explore recursivement les voisins non visites. Il faut <b>marquer</b> les sommets visites (contrairement aux arbres) pour eviter les boucles infinies.</p>
+
+<pre>def explore(G, s, M):
+    # Parcours de la composante connexe contenant s
+    M.add(s)              # marquer s
+    for t in voisins(G, s):
+        if t not in M:
+            explore(G, t, M)
+
+def nb_composantes_connexes(G):
+    n = 0
+    M = set()
+    for s in sommets(G):
+        if s not in M:
+            n += 1
+            explore(G, s, M)
+    return n
+
+def est_connexe(G):
+    return nb_composantes_connexes(G) == 1</pre>
+
+<div class="warn-box"><b>&#9888; Difference arbre vs graphe :</b> Dans un arbre, on n'a pas besoin de marquer les noeuds (pas de cycle). Dans un graphe, il faut <b>toujours</b> marquer pour eviter de revisiter !</div>
+
+<h2>5. Parcours en largeur (BFS)</h2>
+<p>On explore couche par couche en utilisant une file. Utile pour calculer les distances.</p>
+
+<pre>def distance(G, x, y):
+    # Retourne la distance de x a y dans G
+    F = [x]
+    M = set()
+    d = 0
+    while len(F) > 0:
+        C = []                  # couche suivante
+        while len(F) > 0:
+            s = F.pop(0)
+            if s == y:
+                return d
+            if s not in M:
+                M.add(s)
+                for t in voisins(G, s):
+                    if t not in M:
+                        C.append(t)
+        d += 1
+        F = C
+    return None                 # pas de chemin</pre>
+
+<h2>6. Graphe complet : test</h2>
+<pre>def est_complet(G):
+    S = set(sommets(G))
+    for s in S:
+        if {s} | voisins(G, s) != S:
+            return False
+    return True</pre>
+
+<h2>7. Graphes et arbres</h2>
+<p>Un <b>arbre</b> est un graphe connexe acyclique. Reciproquement, tout graphe connexe acyclique dont on pointe un sommet est equivalent a un arbre enracine.</p>
+
+<div class="info-box"><b>&#128161; Propriete fondamentale :</b> Un arbre a n sommets a exactement n-1 aretes. C'est le nombre minimum d'aretes pour un graphe connexe.</div>
+
+<h2>8. Chemins euleriens</h2>
+<p>Un <b>chemin eulerien</b> passe par chaque arete exactement une fois (= tracer sans lever le crayon).</p>
+
+<div class="tip-box"><b>&#9989; Theoreme d'Euler :</b> Un graphe connexe admet un chemin eulerien si et seulement si il a <b>0 ou 2 sommets de degre impair</b>.</div>
+
+<pre>def a_chemin_eulerien(G):
+    if not est_connexe(G):
+        return False
+    nb_impair = 0
+    for s in sommets(G):
+        if len(voisins(G, s)) % 2 == 1:
+            nb_impair += 1
+    return nb_impair in {0, 2}</pre>
+
+<h2>9. Contenu avance (hors programme)</h2>
+
+<div class="extra-box"><b>&#127891; Types de graphes :</b>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td>Simple</td><td>Pas de boucle (arete d'un sommet vers lui-meme)</td></tr>
+<tr><td>Oriente</td><td>Les aretes ont un sens (x -> y)</td></tr>
+<tr><td>Pondere</td><td>Les aretes ont un poids (distance, cout...)</td></tr>
+<tr><td>Etiquete</td><td>Les aretes portent des labels</td></tr>
+<tr><td>Multigraphe</td><td>Plusieurs aretes entre deux memes sommets</td></tr>
+</table>
+</div>
+
+<div class="extra-box"><b>&#127891; Algorithme de Dijkstra (hors programme) :</b> Calcule le plus court chemin dans un graphe pondere. Utilise une file de priorite (tas). Complexite : O((V+E) log V) avec un tas binaire. C'est l'algorithme utilise par les GPS !</div>
+
+<div class="extra-box"><b>&#127891; Chemins hamiltoniens :</b> Un chemin hamiltonien passe par chaque <b>sommet</b> exactement une fois (vs eulerien : chaque arete). Determiner si un tel chemin existe est un probleme NP-complet — pas d'algorithme efficace connu ! Exemples : le probleme du voyageur de commerce.</div>
+
+<div class="extra-box"><b>&#127891; Coloration de graphes :</b> Attribuer des couleurs aux sommets de sorte que deux sommets adjacents n'aient pas la meme couleur. Le <b>nombre chromatique</b> est le minimum de couleurs necessaires. Application : emplois du temps, allocation de frequences radio, coloration de cartes (theoreme des 4 couleurs).</div>
+
+<div class="nav-bottom"><a href="cours9-arbres.html">&larr; Cours precedent</a><span></span></div>
+</div>
+</body>
+</html>
