@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11 — Classes & Objets | AP2 Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;
+  --amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);
+  --green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;
+  --txt:#e6edf3;--txt2:#8b949e;
+  --radius:12px;
+  --code-font:'Fira Code','JetBrains Mono',monospace;
+  --body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif;
+}
+body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.65;min-height:100vh}
+a{color:var(--amber);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--code-font);background:var(--bg3);padding:1px 5px;border-radius:4px;font-size:.88em}
+
+/* Header */
+.header{background:var(--bg2);border-bottom:1px solid var(--bg3);padding:14px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);flex-wrap:wrap}
+.header .back{font-size:1.3rem;opacity:.7}
+.header h1{font-size:1.05rem;font-weight:600;color:var(--amber)}
+.badge{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--amber);font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.5px}
+.score-bar{margin-left:auto;display:flex;gap:16px;font-size:.82rem;font-weight:600}
+.score-bar .g{color:var(--green)}.score-bar .r{color:var(--red)}
+.prog{font-size:.75rem;color:var(--txt2)}
+.prog-bar{height:4px;background:var(--bg3);border-radius:2px;margin-top:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--amber2));transition:width .4s}
+
+/* Container */
+.container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.section-title{font-size:.75rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--bg3)}
+
+/* Quiz card */
+.quiz-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);padding:20px;margin-bottom:14px;transition:border-color .3s}
+.quiz-card.correct{border-color:rgba(34,197,94,.3)}
+.quiz-card.wrong{border-color:rgba(239,68,68,.3)}
+.quiz-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.q-num{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--txt2);font-size:.75rem;font-weight:700;border-radius:6px}
+.q-num.done-right{background:rgba(34,197,94,.15);color:var(--green)}
+.q-num.done-wrong{background:rgba(239,68,68,.15);color:var(--red)}
+.q-text{flex:1;font-size:.92rem}
+.diff-tag{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.diff-tag.easy{background:rgba(34,197,94,.12);color:var(--green)}
+.diff-tag.medium{background:rgba(245,158,11,.12);color:var(--amber)}
+.diff-tag.hard{background:rgba(239,68,68,.12);color:var(--red)}
+
+/* Options */
+.options{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.opt-btn{text-align:left;padding:10px 14px;border-radius:8px;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);font-size:.85rem;cursor:pointer;transition:.2s;font-family:var(--body-font)}
+.opt-btn:hover:not(.locked){border-color:var(--amber);background:var(--amber-dim)}
+.opt-btn.locked{cursor:default;opacity:.6}
+.opt-btn.reveal-right{border-color:var(--green);background:rgba(34,197,94,.1);opacity:1!important}
+.opt-btn.selected-wrong{border-color:var(--red);background:rgba(239,68,68,.08);opacity:1!important}
+.opt-btn.selected-right{border-color:var(--green);background:rgba(34,197,94,.15);opacity:1!important}
+
+/* TF buttons */
+.tf-group{display:flex;gap:10px;margin:8px 0}
+.tf-btn{flex:1;padding:10px;border-radius:8px;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;font-family:var(--body-font)}
+.tf-btn:hover:not(.locked){border-color:var(--amber)}
+.tf-btn.locked{cursor:default;opacity:.6}
+.tf-btn.reveal-right{border-color:var(--green);background:rgba(34,197,94,.1);opacity:1!important}
+.tf-btn.selected-wrong{border-color:var(--red);background:rgba(239,68,68,.08);opacity:1!important}
+.tf-btn.selected-right{border-color:var(--green);background:rgba(34,197,94,.15);opacity:1!important}
+
+/* Input */
+.input-group{display:flex;gap:8px;margin:8px 0}
+.input-answer{flex:1;padding:10px 14px;border-radius:8px;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);font-size:.85rem;font-family:var(--code-font);outline:none}
+.input-answer:focus{border-color:var(--amber)}
+.input-answer:disabled{opacity:.5}
+.submit-btn{padding:10px 18px;border-radius:8px;background:var(--amber);border:none;color:#000;font-weight:700;font-size:.82rem;cursor:pointer;transition:.2s;font-family:var(--body-font)}
+.submit-btn:hover{background:var(--amber2)}
+.submit-btn:disabled{opacity:.4;cursor:default}
+
+/* Explanation */
+.explanation{margin-top:10px;padding:12px 14px;border-radius:8px;font-size:.83rem;line-height:1.6;display:none}
+.explanation.show{display:block}
+.explanation.right{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)}
+.explanation.wrong{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+
+/* Code block */
+.code-block{background:var(--bg);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;margin:8px 0;font-family:var(--code-font);font-size:.82rem;overflow-x:auto;white-space:pre;color:var(--cyan)}
+
+/* Reset */
+.reset-area{text-align:center;margin-top:40px}
+.reset-btn{background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:.8rem;font-family:var(--body-font);font-weight:600;transition:.2s}
+.reset-btn:hover{background:rgba(239,68,68,.1)}
+
+/* Nav */
+.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:16px;border-top:1px solid var(--bg3);font-size:.85rem}
+
+@media(max-width:600px){
+  .header{padding:10px 14px;gap:8px}
+  .header h1{font-size:.9rem}
+  .score-bar{margin-left:0;width:100%;justify-content:space-between;margin-top:4px}
+  .container{padding:16px 10px 40px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back" title="Retour">←</a>
+  <h1>M11 — Classes & Objets</h1>
+  <span class="badge">30 QUESTIONS</span>
+  <div class="score-bar">
+    <span class="g">✓ <span id="sR">0</span></span>
+    <span class="r">✗ <span id="sW">0</span></span>
+    <span class="prog"><span id="fp">0</span>/30
+      <div class="prog-bar"><div class="prog-fill" id="pb" style="width:0%"></div></div>
+    </span>
+  </div>
+</div>
+
+<div class="container" id="quizContainer"></div>
+
+<div style="max-width:800px;margin:0 auto;padding:0 16px 40px">
+  <div class="reset-area">
+    <button class="reset-btn" onclick="if(confirm('Réinitialiser la progression du Module 11 ?')){localStorage.removeItem(STATE_KEY);location.reload()}">🗑️ Réinitialiser</button>
+  </div>
+  <div class="nav-bottom">
+    <a href="module10-graphes.html">← Module 10</a>
+    <a href="index.html">Accueil →</a>
+  </div>
+</div>
+
+<script>
+const STATE_KEY = "ap2_mod11_state";
+const questions = [
+  {
+    "id": 1,
+    "type": "mcq",
+    "diff": "easy",
+    "text": "En Python, que représente une <b>classe</b> ?",
+    "options": [
+      "Un type de variable numérique",
+      "Un « moule à objets » définissant attributs, méthodes et surcharges",
+      "Une fonction spéciale pour les boucles",
+      "Un module importable"
+    ],
+    "answer": 1,
+    "explanation": "Cours : une classe est un « moule à objets », qui définit ce qu'on peut faire avec les objets fabriqués avec ce moule (attributs, méthodes, surcharges)."
+  },
+  {
+    "id": 2,
+    "type": "mcq",
+    "diff": "easy",
+    "text": "Quelle est la relation entre <code>z = 1+2j</code> et la classe <code>complex</code> ?",
+    "options": [
+      "<code>z</code> est un attribut de <code>complex</code>",
+      "<code>z</code> est une instance de la classe <code>complex</code>",
+      "<code>z</code> est une méthode de <code>complex</code>",
+      "<code>complex</code> hérite de <code>z</code>"
+    ],
+    "answer": 1,
+    "explanation": "Cours : <code>z</code> est un <b>objet</b> qui appartient à la classe <code>complex</code> — on dit que <code>z</code> est une <b>instance</b> de cette classe."
+  },
+  {
+    "id": 3,
+    "type": "tf",
+    "diff": "easy",
+    "text": "En Python, tous les types sont des classes, et toutes les variables sont des objets.",
+    "answer": true,
+    "explanation": "Cours (slide 5) : « En Python, tous les types sont des classes, et toutes les variables sont donc des objets (des instances de ces classes). »"
+  },
+  {
+    "id": 4,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Dans la définition d'une classe, à quoi sert le paramètre <code>self</code> ?",
+    "options": [
+      "C'est un mot réservé de Python",
+      "Il désigne l'objet concerné par la méthode",
+      "Il stocke les arguments de la fonction",
+      "Il permet d'hériter d'une autre classe"
+    ],
+    "answer": 1,
+    "explanation": "Cours : <code>self</code> n'est pas un mot réservé, c'est une <b>convention</b> pour rappeler que cet argument désigne l'objet concerné par la méthode. Il ne fait pas partie des arguments à spécifier à l'appel."
+  },
+  {
+    "id": 5,
+    "type": "input",
+    "diff": "medium",
+    "text": "Avec la classe <code>Vecteur2d</code> du cours, que renvoie <code>Vecteur2d(3,4).norm()</code> ?",
+    "answer": "5.0",
+    "accept": [
+      "5.0",
+      "5"
+    ],
+    "explanation": "<code>norm = (3²+4²)^0.5 = (9+16)^0.5 = 25^0.5 = 5.0</code>"
+  },
+  {
+    "id": 6,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Quelle méthode spéciale est appelée lors de la <b>création</b> d'une instance ?",
+    "options": [
+      "<code>__repr__</code>",
+      "<code>__init__</code>",
+      "<code>__add__</code>",
+      "<code>__new__</code>"
+    ],
+    "answer": 1,
+    "explanation": "<code>__init__</code> est la méthode d'initialisation appelée automatiquement à la création d'un objet. <code>__repr__</code> gère l'affichage."
+  },
+  {
+    "id": 7,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Quelle méthode spéciale est appelée quand on tape <code>u</code> dans le terminal interactif (pour afficher l'objet) ?",
+    "options": [
+      "<code>__init__</code>",
+      "<code>__str__</code>",
+      "<code>__repr__</code>",
+      "<code>__display__</code>"
+    ],
+    "answer": 2,
+    "explanation": "Cours : <code>__repr__</code> est la méthode spéciale pour l'affichage d'un objet dans l'interpréteur. <code>__str__</code> existe aussi en Python mais n'est pas la réponse du cours ici."
+  },
+  {
+    "id": 8,
+    "type": "input",
+    "diff": "medium",
+    "text": "Avec <code>v = Vecteur2d(1,2)</code> et la méthode <code>__repr__</code> du cours, que renvoie <code>v</code> dans l'interpréteur ?",
+    "answer": "(1,2)",
+    "accept": [
+      "(1,2)",
+      "(1, 2)"
+    ],
+    "explanation": "La méthode <code>__repr__</code> renvoie <code>'(' + str(self.x) + ',' + str(self.y) + ')'</code>, donc <code>(1,2)</code>."
+  },
+  {
+    "id": 9,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Pour définir l'addition <code>u + v</code> entre deux <code>Vecteur2d</code>, quelle méthode faut-il implémenter ?",
+    "options": [
+      "<code>__sum__</code>",
+      "<code>__add__</code>",
+      "<code>__plus__</code>",
+      "<code>__concat__</code>"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 10-11) : la surcharge de <code>+</code> se fait avec la méthode spéciale <code>__add__</code>."
+  },
+  {
+    "id": 10,
+    "type": "input",
+    "diff": "medium",
+    "text": "Avec <code>v1 = Vecteur2d(1,2)</code> et <code>v2 = Vecteur2d(-2.5,2)</code>, que vaut <code>v1 + v2</code> ?",
+    "answer": "(-1.5,4)",
+    "accept": [
+      "(-1.5,4)",
+      "(-1.5, 4)"
+    ],
+    "explanation": "<code>__add__</code> retourne <code>Vecteur2d(1+(-2.5), 2+2) = Vecteur2d(-1.5, 4)</code>."
+  },
+  {
+    "id": 11,
+    "type": "mcq",
+    "diff": "hard",
+    "text": "Quelle méthode spéciale correspond à l'opérateur <code>[]</code> (indexation) ?",
+    "options": [
+      "<code>__index__</code>",
+      "<code>__getitem__</code>",
+      "<code>__item__</code>",
+      "<code>__at__</code>"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 12) : <code>[]</code> est surchargé par <code>__getitem__</code>. Utilisé dans la classe <code>Matrice2</code> pour accéder à <code>A[i,j]</code>."
+  },
+  {
+    "id": 12,
+    "type": "mcq",
+    "diff": "hard",
+    "text": "Quelle est la différence entre <code>__mul__</code> et <code>__rmul__</code> ?",
+    "options": [
+      "Pas de différence, ce sont des alias",
+      "<code>__mul__</code> = A*B quand A est l'instance ; <code>__rmul__</code> = A*B quand B est l'instance",
+      "<code>__rmul__</code> est pour la division inverse",
+      "<code>__rmul__</code> n'existe pas en Python"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 25) : <code>__rmul__(B, A)</code> définit <code>A*B</code> quand A n'est <b>pas</b> une instance de la classe (ex: <code>3*A</code> avec A une Matrice2)."
+  },
+  {
+    "id": 13,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Comment rendre un attribut <b>interne</b> (caché) dans une classe Python ?",
+    "options": [
+      "Le préfixer par <code>_</code>",
+      "Le préfixer par <code>__</code> (double underscore)",
+      "Le déclarer <code>private</code>",
+      "Le mettre dans un tuple"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 15-16) : on définit des attributs internes en les faisant précéder d'un <b>double caractère souligné</b> (ex: <code>self.__P</code>)."
+  },
+  {
+    "id": 14,
+    "type": "input",
+    "diff": "hard",
+    "text": "Avec la classe <code>Pile</code> utilisant <code>self.__P</code>, que se passe-t-il si on fait <code>p.__P</code> ?",
+    "answer": "AttributeError",
+    "accept": [
+      "AttributeError",
+      "attributeerror",
+      "Erreur",
+      "erreur"
+    ],
+    "explanation": "Cours (slide 16) : <code>p.__P</code> → <code>AttributeError: 'Pile' object has no attribute '__P'</code>. L'attribut est caché par le <em>name mangling</em> de Python."
+  },
+  {
+    "id": 15,
+    "type": "tf",
+    "diff": "medium",
+    "text": "Sans attributs internes, on peut rendre un objet Pile incohérent en faisant <code>p.P = 0</code>.",
+    "answer": true,
+    "explanation": "Cours (slide 15) : si P est public, rien n'empêche de faire <code>p.P = 0</code>, rendant la pile incohérente. C'est pourquoi on utilise des attributs internes pour l'<b>encapsulation</b>."
+  },
+  {
+    "id": 16,
+    "type": "mcq",
+    "diff": "easy",
+    "text": "Dans la classe <code>Pile</code> du cours, quelle structure Python est utilisée en interne ?",
+    "options": [
+      "Un dictionnaire",
+      "Une liste",
+      "Un tuple",
+      "Un ensemble (set)"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 13) : <code>self.P = []</code>. La pile utilise une <b>liste Python</b> en interne, avec <code>append</code> pour empiler et <code>pop</code> pour dépiler."
+  },
+  {
+    "id": 17,
+    "type": "input",
+    "diff": "medium",
+    "text": "Avec la classe <code>Pile</code>, après <code>p = Pile(); p.empile(1); p.empile(3.14)</code>, que renvoie <code>p.depile()</code> ?",
+    "answer": "3.14",
+    "accept": [
+      "3.14"
+    ],
+    "explanation": "LIFO : le dernier élément empilé (3.14) est le premier dépilé. <code>pop()</code> retire et retourne le dernier élément."
+  },
+  {
+    "id": 18,
+    "type": "input",
+    "diff": "hard",
+    "text": "Avec la classe <code>Arbre</code> du cours :<br><code>A1 = Arbre('a')</code><br><code>A2 = Arbre('b')</code><br><code>A = Arbre('c', [A1, A2])</code><br>Que vaut <code>hauteur(A)</code> ?",
+    "answer": "2",
+    "accept": [
+      "2"
+    ],
+    "explanation": "<code>hauteur(A)</code> : A a deux enfants (feuilles a et b). Pour chaque feuille, <code>hauteur</code> retourne 0+1=1. Puis <code>max(1,1)+1 = 2</code>."
+  },
+  {
+    "id": 19,
+    "type": "input",
+    "diff": "medium",
+    "text": "Avec <code>A.enfants[0].etiquette</code>, que renvoie Python (avec A défini ci-dessus) ?",
+    "answer": "a",
+    "accept": [
+      "a",
+      "'a'"
+    ],
+    "explanation": "<code>A.enfants[0]</code> = <code>A1</code>, et <code>A1.etiquette = 'a'</code>."
+  },
+  {
+    "id": 20,
+    "type": "input",
+    "diff": "hard",
+    "text": "Avec <code>A = Matrice2(1,3,2,5)</code>, que vaut <code>A.det()</code> ?",
+    "answer": "-1",
+    "accept": [
+      "-1"
+    ],
+    "explanation": "<code>det = A[1,1]*A[2,2] - A[1,2]*A[2,1] = 1×5 - 3×2 = 5 - 6 = -1</code>."
+  },
+  {
+    "id": 21,
+    "type": "input",
+    "diff": "hard",
+    "text": "Avec <code>A = Matrice2(1,3,2,5)</code>, que vaut <code>A.trace()</code> ?",
+    "answer": "6",
+    "accept": [
+      "6"
+    ],
+    "explanation": "<code>trace = A[1,1] + A[2,2] = 1 + 5 = 6</code>."
+  },
+  {
+    "id": 22,
+    "type": "mcq",
+    "diff": "hard",
+    "text": "Dans la méthode <code>__pow__</code> de <code>Matrice2</code>, quelle technique est utilisée pour calculer <code>A**n</code> efficacement ?",
+    "options": [
+      "Multiplication naïve n fois",
+      "Exponentiation rapide (récursive, O(log n))",
+      "Diagonalisation",
+      "Décomposition LU"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 26) : la méthode <code>__pow__</code> utilise l'<b>exponentiation rapide</b> : cas de base n=0 (identité), n=1 (copie), n impair → A^(n-1)·A, n pair → (A^(n/2))²."
+  },
+  {
+    "id": 23,
+    "type": "input",
+    "diff": "hard",
+    "text": "<code>Matrice2(1,3,2,5).__getitem__((2,1))</code> renvoie quoi ?",
+    "answer": "2",
+    "accept": [
+      "2"
+    ],
+    "explanation": "<code>__getitem__(self, pos)</code> renvoie <code>self.coeff[pos[0]-1][pos[1]-1]</code>. Avec pos=(2,1) : <code>coeff[1][0] = 2</code> (indices 1-based dans l'interface, 0-based en interne)."
+  },
+  {
+    "id": 24,
+    "type": "tf",
+    "diff": "medium",
+    "text": "<code>Matrice2(1,3,2,5).inv() * Matrice2(1,3,2,5)</code> donne la matrice identité.",
+    "answer": true,
+    "explanation": "Cours (slide 28) : <code>A.inv() * A</code> donne bien <code>| 1.0  0.0 |</code> / <code>| 0.0  1.0 |</code>. Le déterminant est -1 ≠ 0 donc l'inverse existe."
+  },
+  {
+    "id": 25,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Dans la classe <code>Graphe</code> du cours, quelle structure interne est utilisée ?",
+    "options": [
+      "Une liste d'adjacence (liste de listes)",
+      "Un dictionnaire (sommet → ensemble de voisins)",
+      "Une matrice d'adjacence",
+      "Un arbre"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 20) : <code>self.__G = dict()</code>. Chaque sommet est une clé, la valeur est un <b>set</b> de voisins."
+  },
+  {
+    "id": 26,
+    "type": "mcq",
+    "diff": "hard",
+    "text": "Dans la fonction <code>nb_composantes_connexes(G)</code> du cours, quel est le rôle de l'ensemble <code>M</code> ?",
+    "options": [
+      "Stocker les arêtes",
+      "Marquer les sommets déjà visités",
+      "Compter les composantes",
+      "Stocker les voisins"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 21) : <code>M = set()</code> sert à <b>marquer les sommets</b> déjà explorés. Quand on rencontre un sommet non marqué, c'est une nouvelle composante connexe."
+  },
+  {
+    "id": 27,
+    "type": "tf",
+    "diff": "easy",
+    "text": "Une méthode est simplement un attribut de type fonction, attachée à l'instance de l'objet.",
+    "answer": true,
+    "explanation": "Cours (slide 4) : « Une méthode est simplement un attribut de type fonction, autrement dit, une fonction attachée à l'instance de l'objet. »"
+  },
+  {
+    "id": 28,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Quand on écrit <code>v.norm()</code>, Python appelle en réalité :",
+    "options": [
+      "<code>norm(v)</code>",
+      "<code>Vecteur2d.norm(v)</code> avec <code>self = v</code>",
+      "<code>v.__norm__()</code>",
+      "<code>norm(self=v)</code>"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 7) : <code>v.norm()</code> provoque l'appel de la fonction <code>norm</code> avec <code>self = v</code>. L'argument <code>self</code> est implicite à l'appel."
+  },
+  {
+    "id": 29,
+    "type": "mcq",
+    "diff": "medium",
+    "text": "Que fait la méthode <code>conjugate()</code> de la classe <code>complex</code> ?",
+    "options": [
+      "Retourne le module",
+      "Retourne le conjugué (partie imaginaire opposée)",
+      "Retourne la partie réelle",
+      "Retourne l'inverse"
+    ],
+    "answer": 1,
+    "explanation": "Cours (slide 4) : <code>z.conjugate()</code> retourne le conjugué. Ex: <code>(1+2j).conjugate() = (1-2j)</code>."
+  },
+  {
+    "id": 30,
+    "type": "input",
+    "diff": "easy",
+    "text": "Pour un nombre complexe <code>z = 1+2j</code>, que vaut <code>z.real</code> ?",
+    "answer": "1.0",
+    "accept": [
+      "1.0",
+      "1"
+    ],
+    "explanation": "Cours (slide 3) : l'attribut <code>real</code> donne la partie réelle. <code>(1+2j).real = 1.0</code>."
+  }
+];
+
+const sections = {
+  1: "Définition & instanciation",
+  6: "Méthodes spéciales",
+  9: "Surcharge d'opérateurs",
+  13: "Attributs internes & encapsulation",
+  16: "Exemples : Pile, Arbre, Graphe",
+  20: "Exemple : Matrice2",
+  27: "Questions transversales"
+};
+
+let state;
+function loadState(){try{const s=localStorage.getItem(STATE_KEY);if(s)return JSON.parse(s)}catch(e){}return{answered:{},right:0,wrong:0}}
+function saveState(){try{localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
+
+function updateScore(){
+  const done=Object.keys(state.answered).filter(k=>!k.includes("_")).length;
+  document.getElementById("sR").textContent=state.right;
+  document.getElementById("sW").textContent=state.wrong;
+  document.getElementById("fp").textContent=done;
+  document.getElementById("pb").style.width=Math.round(done/questions.length*100)+"%";
+}
+
+function render(){
+  state=loadState();
+  const c=document.getElementById("quizContainer");
+  c.innerHTML="";
+
+  questions.forEach(q=>{
+    // Section headers
+    if(sections[q.id]){
+      const sh=document.createElement("div");
+      sh.className="section-title";
+      sh.textContent=sections[q.id];
+      c.appendChild(sh);
+    }
+
+    const card=document.createElement("div");
+    card.className="quiz-card";
+    const a=state.answered[q.id];
+    if(a===true) card.classList.add("correct");
+    else if(a===false) card.classList.add("wrong");
+
+    let nc="q-num";
+    if(a===true)nc+=" done-right";else if(a===false)nc+=" done-wrong";
+    const dl=q.diff==="easy"?"Facile":q.diff==="medium"?"Moyen":"Difficile";
+
+    let h=`<div class="quiz-head"><div class="${nc}">${q.id}</div><div class="q-text">${q.text}</div><span class="diff-tag ${q.diff}">${dl}</span></div>`;
+
+    if(q.type==="mcq"){
+      h+=`<div class="options">`;
+      q.options.forEach((o,i)=>{
+        let cl="opt-btn";
+        if(a!==undefined){
+          cl+=" locked";
+          if(i===q.answer) cl+=" reveal-right";
+          if(a===false && state.answered[q.id+"_pick"]===i) cl+=" selected-wrong";
+          if(a===true && i===q.answer) cl+=" selected-right";
+        }
+        h+=`<button class="${cl}" ${a!==undefined?"disabled":""} onclick="pickMCQ(${q.id},${i})">${o}</button>`;
+      });
+      h+=`</div>`;
+    } else if(q.type==="tf"){
+      h+=`<div class="tf-group">`;
+      [true,false].forEach(val=>{
+        let cl="tf-btn";
+        if(a!==undefined){
+          cl+=" locked";
+          if(val===q.answer) cl+=" reveal-right";
+          if(a===false && state.answered[q.id+"_pick"]===val) cl+=" selected-wrong";
+          if(a===true && val===q.answer) cl+=" selected-right";
+        }
+        h+=`<button class="${cl}" ${a!==undefined?"disabled":""} onclick="pickTF(${q.id},${val})">${val?"Vrai":"Faux"}</button>`;
+      });
+      h+=`</div>`;
+    } else if(q.type==="input"){
+      const dis=a!==undefined?"disabled":"";
+      const val=a!==undefined?(state.answered[q.id+"_pick"]||""):"";
+      h+=`<div class="input-group"><input class="input-answer" id="inp-${q.id}" ${dis} value="${val}" placeholder="Votre réponse..." onkeydown="if(event.key==='Enter')submitInput(${q.id})"><button class="submit-btn" id="btn-${q.id}" ${dis} onclick="submitInput(${q.id})">→</button></div>`;
+    }
+
+    // Explanation
+    if(a!==undefined){
+      h+=`<div class="explanation show ${a?"right":"wrong"}">${a?"✅ Correct — ":"❌ Incorrect — "}${q.explanation}</div>`;
+    } else {
+      h+=`<div class="explanation" id="expl-${q.id}"></div>`;
+    }
+
+    card.innerHTML=h;
+    c.appendChild(card);
+  });
+  updateScore();
+}
+
+function record(qid,correct,pick){
+  state.answered[qid]=correct;
+  state.answered[qid+"_pick"]=pick;
+  if(correct) state.right++; else state.wrong++;
+  saveState();
+}
+
+function pickMCQ(qid,idx){
+  const q=questions.find(x=>x.id===qid);
+  const correct=idx===q.answer;
+  record(qid,correct,idx);
+  render();
+  document.getElementById("quizContainer").querySelector(`#card-${qid}`)?.scrollIntoView({block:"nearest"});
+}
+
+function pickTF(qid,val){
+  const q=questions.find(x=>x.id===qid);
+  const correct=val===q.answer;
+  record(qid,correct,val);
+  render();
+}
+
+function submitInput(qid){
+  const inp=document.getElementById("inp-"+qid);
+  if(!inp) return;
+  const v=inp.value.trim();
+  if(!v) return;
+  const q=questions.find(x=>x.id===qid);
+  const correct=q.accept.some(a=>v.toLowerCase()===a.toLowerCase());
+  record(qid,correct,v);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
