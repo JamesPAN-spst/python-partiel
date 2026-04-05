@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours 11 — Classes et Objets | AP2</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21293a;--amber:#f59e0b;--amber2:#d97706;--amber-dim:rgba(245,158,11,.12);--green:#22c55e;--red:#ef4444;--orange:#f97316;--cyan:#06b6d4;--purple:#a78bfa;--txt:#e6edf3;--txt2:#8b949e;--radius:10px;--code-font:'Fira Code','JetBrains Mono','Cascadia Code',monospace;--body-font:-apple-system,'Segoe UI','Noto Sans SC',sans-serif}body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-height:1.75;min-height:100vh}a{color:var(--amber);text-decoration:none}a:hover{text-decoration:underline}.header{background:var(--bg2);border-bottom:1px solid rgba(245,158,11,.2);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.header .back{font-size:1.4rem;opacity:.7}.header h1{font-size:1.1rem;font-weight:600;color:var(--amber)}.header .quiz-link{margin-left:auto;background:var(--amber);color:var(--bg);padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700}.header .quiz-link:hover{background:var(--amber2);text-decoration:none}.container{max-width:780px;margin:0 auto;padding:28px 20px 60px}h2{font-size:1.3rem;font-weight:700;color:var(--amber);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid rgba(245,158,11,.2)}h2:first-child{margin-top:0}h3{font-size:1rem;font-weight:600;color:var(--txt);margin:24px 0 10px}p{margin:8px 0;color:var(--txt2)}code{background:var(--bg2);padding:2px 7px;border-radius:4px;font-family:var(--code-font);font-size:.84rem;color:var(--cyan)}pre{background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:16px;margin:12px 0;overflow-x:auto;font-family:var(--code-font);font-size:.82rem;line-height:1.7;color:var(--cyan)}.warn-box{background:rgba(239,68,68,.08);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.warn-box b{color:var(--red)}.tip-box{background:rgba(34,197,94,.08);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.tip-box b{color:var(--green)}.info-box{background:rgba(167,139,250,.08);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.info-box b{color:var(--purple)}.extra-box{background:rgba(6,182,212,.06);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.88rem}.extra-box b{color:var(--cyan)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}th{background:var(--bg2);color:var(--amber);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--bg3)}td{padding:8px 12px;border-bottom:1px solid var(--bg3);color:var(--txt2)}.nav-bottom{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--bg3)}.nav-bottom a{display:flex;align-items:center;gap:6px;font-size:.9rem;padding:8px 16px;border:1px solid var(--bg3);border-radius:8px;transition:.2s}.nav-bottom a:hover{border-color:var(--amber);text-decoration:none}@media(max-width:600px){.header{padding:12px 16px;gap:10px}.header h1{font-size:.95rem}.container{padding:20px 14px 40px}pre{font-size:.75rem}}</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">&larr;</a><h1>Cours 11 — Classes et Objets</h1><a href="module11-classes.html" class="quiz-link">&rarr; Quiz (20 questions)</a></div>
+<div class="container">
+
+<h2>1. Classe, objet, instance</h2>
+<p>En Python, <b>tous les types sont des classes</b> et toutes les variables sont des <b>objets</b> (instances de classes). La classe est le "moule", l'objet est la "piece fabriquee".</p>
+
+<pre>z = 1 + 2j
+type(z)        # &lt;class 'complex'&gt;
+z.real         # 1.0   (attribut)
+z.imag         # 2.0   (attribut)
+z.conjugate()  # (1-2j) (methode)</pre>
+
+<table>
+<tr><th>Concept</th><th>Definition</th></tr>
+<tr><td><b>Classe</b></td><td>Modele qui definit attributs, methodes et comportements</td></tr>
+<tr><td><b>Objet / Instance</b></td><td>Variable creee a partir d'une classe</td></tr>
+<tr><td><b>Attribut</b></td><td>Donnee attachee a un objet (<code>z.real</code>)</td></tr>
+<tr><td><b>Methode</b></td><td>Fonction attachee a un objet (<code>z.conjugate()</code>)</td></tr>
+</table>
+
+<h2>2. Definir une classe</h2>
+
+<pre>class Vecteur2d():
+    def __init__(self, x, y):   # constructeur
+        self.x = x              # attribut x
+        self.y = y              # attribut y
+
+    def norm(self):             # methode
+        return (self.x**2 + self.y**2)**0.5
+
+    def __repr__(self):         # affichage
+        return '(' + str(self.x) + ',' + str(self.y) + ')'</pre>
+
+<div class="warn-box"><b>&#9888; self :</b> Le premier parametre de chaque methode est <code>self</code> — il designe l'objet lui-meme. On ne le passe <b>pas</b> a l'appel : <code>v.norm()</code> appelle <code>norm(self=v)</code>.</div>
+
+<h3>Utilisation</h3>
+<pre>u = Vecteur2d(1, 2)   # appelle __init__(self, 1, 2)
+u                      # appelle __repr__ -> (1,2)
+u.norm()               # 2.2360...
+u.x                    # 1  (acces direct a l'attribut)</pre>
+
+<h2>3. Methodes speciales (dunder methods)</h2>
+<p>Les methodes <code>__xxx__</code> (double underscore = "dunder") definissent le comportement des operateurs et fonctions Python sur vos objets.</p>
+
+<table>
+<tr><th>Methode</th><th>Declenchee par</th><th>Exemple</th></tr>
+<tr><td><code>__init__(self, ...)</code></td><td>Creation d'objet</td><td><code>v = Vecteur2d(1,2)</code></td></tr>
+<tr><td><code>__repr__(self)</code></td><td>Affichage / <code>repr()</code></td><td><code>print(v)</code></td></tr>
+<tr><td><code>__add__(self, other)</code></td><td><code>+</code></td><td><code>v1 + v2</code></td></tr>
+<tr><td><code>__sub__(self, other)</code></td><td><code>-</code></td><td><code>v1 - v2</code></td></tr>
+<tr><td><code>__mul__(self, other)</code></td><td><code>*</code></td><td><code>v1 * v2</code></td></tr>
+<tr><td><code>__rmul__(self, other)</code></td><td><code>*</code> (operande gauche non gere)</td><td><code>3 * v</code></td></tr>
+<tr><td><code>__pow__(self, n)</code></td><td><code>**</code></td><td><code>A ** 5</code></td></tr>
+<tr><td><code>__eq__(self, other)</code></td><td><code>==</code></td><td><code>v1 == v2</code></td></tr>
+<tr><td><code>__lt__(self, other)</code></td><td><code>&lt;</code></td><td><code>v1 &lt; v2</code></td></tr>
+<tr><td><code>__getitem__(self, key)</code></td><td><code>[]</code></td><td><code>A[1,2]</code></td></tr>
+</table>
+
+<h3>Surcharge de + pour Vecteur2d</h3>
+<pre>class Vecteur2d():
+    # ... __init__, __repr__ ...
+
+    def __add__(u, v):    # surcharge de +
+        return Vecteur2d(u.x + v.x, u.y + v.y)
+
+v1 = Vecteur2d(1, 2)
+v2 = Vecteur2d(-2.5, 2)
+v1 + v2                   # (-1.5, 4)</pre>
+
+<div class="info-box"><b>&#128161; __rmul__ :</b> Quand Python evalue <code>3 * v</code>, il essaie d'abord <code>int.__mul__(3, v)</code> qui echoue, puis appelle <code>Vecteur2d.__rmul__(v, 3)</code>. C'est le "reverse multiply".</div>
+
+<h2>4. Attributs internes (encapsulation)</h2>
+<p>Prefixer un attribut par <code>__</code> le rend "interne" (cache) — inaccessible directement depuis l'exterieur.</p>
+
+<pre>class Pile():
+    def __init__(self):
+        self.__P = []      # attribut interne !
+
+    def empile(self, x):
+        self.__P.append(x)
+
+    def depile(self):
+        assert len(self.__P) > 0, "la pile est vide !"
+        return self.__P.pop()
+
+p = Pile()
+p.empile(1)
+p.__P              # AttributeError ! (acces interdit)</pre>
+
+<div class="tip-box"><b>&#9989; Pourquoi encapsuler ?</b> Pour empecher l'utilisateur de corrompre l'etat interne de l'objet. Par exemple, sans <code>__</code>, on pourrait faire <code>p.P = 0</code> et casser la pile.</div>
+
+<div class="extra-box"><b>&#127891; Hors programme — Name mangling :</b> Python ne cache pas reellement <code>__P</code>. Il le renomme en <code>_Pile__P</code>. C'est du "name mangling". On peut donc y acceder via <code>p._Pile__P</code>, mais c'est une mauvaise pratique.</div>
+
+<h2>5. Classe Arbre (avec OOP)</h2>
+<pre>class Arbre():
+    def __init__(self, etiquette=None, enfants=[]):
+        self.etiquette = etiquette
+        assert type(enfants) is list
+        self.enfants = enfants
+
+    def __repr__(self):
+        return '## ' + str(self.etiquette) \
+            + ', ' + str(len(self.enfants)) + ' enfant(s) ##'
+
+A1 = Arbre('a')              # feuille
+A2 = Arbre('b')              # feuille
+A  = Arbre('c', [A1, A2])    # noeud avec 2 enfants
+A.enfants[0].etiquette        # 'a'</pre>
+
+<h3>Hauteur avec la classe</h3>
+<pre>def hauteur(A):
+    H = 0
+    for E in A.enfants:       # A.enfants au lieu de enfants(A)
+        H = max(H, hauteur(E))
+    return H + 1</pre>
+
+<h2>6. Classe Graphe (avec OOP)</h2>
+<pre>class Graphe():
+    def __init__(self):
+        self.__G = dict()
+
+    def ajoute_sommet(self, s, voisins):
+        assert type(voisins) is set
+        self.__G[s] = voisins
+        for t in voisins:
+            if t in self.__G:
+                self.__G[t].add(s)
+
+    def sommets(self):
+        return set(self.__G.keys())
+
+    def voisins(self, s):
+        return self.__G[s]</pre>
+
+<div class="info-box"><b>&#128161; Notation objet vs fonction :</b> Avec les classes, on ecrit <code>G.voisins(s)</code> au lieu de <code>voisins(G, s)</code>. L'objet est implicitement passe via <code>self</code>.</div>
+
+<h2>7. Classe Matrice2 (exemple complet)</h2>
+<p>Le cours presente une classe <code>Matrice2</code> pour les matrices 2x2 avec surcharge complete des operateurs.</p>
+
+<pre>class Matrice2():
+    def __init__(self, a11, a12, a21, a22):
+        self.coeff = [[a11, a12], [a21, a22]]
+
+    def __getitem__(self, pos):       # A[i,j] avec indices 1-based
+        return self.coeff[pos[0]-1][pos[1]-1]
+
+    def __add__(A, B):                # A + B
+        return Matrice2(A[1,1]+B[1,1], A[1,2]+B[1,2],
+                        A[2,1]+B[2,1], A[2,2]+B[2,2])
+
+    def __mul__(A, B):                # A * B (produit matriciel)
+        return Matrice2(
+            A[1,1]*B[1,1]+A[1,2]*B[2,1], A[1,1]*B[1,2]+A[1,2]*B[2,2],
+            A[2,1]*B[1,1]+A[2,2]*B[2,1], A[2,1]*B[1,2]+A[2,2]*B[2,2])
+
+    def __rmul__(B, A):               # scalaire * matrice
+        return Matrice2(A*B[1,1], A*B[1,2], A*B[2,1], A*B[2,2])
+
+    def __pow__(A, n):                # A**n (exponentiation rapide)
+        if n == 0: return Matrice2(1,0,0,1)
+        if n == 1: return Matrice2(A[1,1],A[1,2],A[2,1],A[2,2])
+        if n % 2 == 1: return (A**(n-1)) * A
+        B = A**(n//2)
+        return B * B
+
+    def det(self):
+        return self[1,1]*self[2,2] - self[1,2]*self[2,1]
+
+    def trace(self):
+        return self[1,1] + self[2,2]
+
+    def inv(self):
+        d = self.det()
+        if d != 0:
+            return (1/d) * Matrice2(self[2,2], -self[1,2],
+                                    -self[2,1], self[1,1])</pre>
+
+<div class="extra-box"><b>&#127891; Exponentiation rapide :</b> La methode <code>__pow__</code> utilise la decomposition binaire de n. Calculer A<sup>n</sup> ne fait que O(log n) multiplications au lieu de n. C'est le meme principe que l'exponentiation rapide pour les entiers.</div>
+
+<div class="extra-box"><b>&#127891; Hors programme — Heritage :</b> En POO, une classe peut <b>heriter</b> d'une autre : <code>class Matrice3(Matrice2)</code> reutiliserait les methodes de <code>Matrice2</code>. Python supporte meme l'heritage multiple. C'est un concept fondamental en genie logiciel.</div>
+
+<div class="nav-bottom"><a href="cours10-graphes.html">&larr; Cours precedent</a><span></span></div>
+</div>
+</body>
+</html>

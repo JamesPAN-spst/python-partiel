@@ -82,18 +82,18 @@ body{background:var(--bg);color:var(--txt);font-family:var(--body-font);line-hei
 <div class="section-label">Chapitre 1-2 — Bases Python</div>
 <div class="grid" id="gridOld"></div>
 <div class="section-label">Chapitre 3 — Types abstraits classiques</div>
-<div class="grid" id="gridNew"></div>
-<div class="section-label">Chapitre 4 — Classes & Objets</div>
+<div class="grid" id="gridCh3"></div>
+<div class="section-label">Chapitre 4 — Classes et objets</div>
 <div class="grid" id="gridCh4"></div>
 <div class="pieges-section">
   <div class="pieges-title">&#128680; Top Pieges du Partiel</div>
-  <div class="piege"><span class="num">1</span><div>Priorite operateurs set : <code>2 in {1,3} & {2,4}</code> &rarr; <b>False</b> (<code>&</code> avant <code>in</code>)</div></div>
-  <div class="piege"><span class="num">2</span><div>Copie liste : <code>B = A</code> ne copie pas &rarr; <code>B = A[:]</code> ou <code>A.copy()</code></div></div>
-  <div class="piege"><span class="num">3</span><div>Tuple 1 element : <code>(1)</code> est int, <code>(1,)</code> est tuple</div></div>
-  <div class="piege"><span class="num">4</span><div><code>F.pop(0)</code> est O(n) ! Utiliser <code>deque.popleft()</code> pour O(1)</div></div>
-  <div class="piege"><span class="num">5</span><div>Parcours graphe : <b>toujours marquer</b> les sommets visites (sinon boucle infinie)</div></div>
-  <div class="piege"><span class="num">6</span><div>DFS = pile (recursion), BFS = file &mdash; ne pas confondre !</div></div>
-  <div class="piege"><span class="num">7</span><div>Arbre a n sommets = n-1 aretes. Graphe connexe acyclique = arbre.</div></div>
+  <div class="piege"><span class="num">1</span><div><code>self</code> n'est PAS un mot reserve — c'est une convention</div></div>
+  <div class="piege"><span class="num">2</span><div><code>v.norm()</code> appelle <code>norm(self=v)</code> : ne pas passer <code>self</code> a l'appel !</div></div>
+  <div class="piege"><span class="num">3</span><div><code>__rmul__</code> : appele quand l'operande gauche ne gere pas <code>*</code> (<code>3 * v</code>)</div></div>
+  <div class="piege"><span class="num">4</span><div><code>self.__P</code> = attribut interne. Acces direct &rarr; <code>AttributeError</code></div></div>
+  <div class="piege"><span class="num">5</span><div><code>F.pop(0)</code> est O(n) ! Utiliser <code>deque.popleft()</code> pour O(1)</div></div>
+  <div class="piege"><span class="num">6</span><div>Parcours graphe : <b>toujours marquer</b> les sommets visites (sinon boucle infinie)</div></div>
+  <div class="piege"><span class="num">7</span><div>DFS = pile (recursion), BFS = file &mdash; ne pas confondre !</div></div>
   <div class="piege"><span class="num">8</span><div>Euler : chemin eulerien ssi 0 ou 2 sommets de degre impair</div></div>
   <div class="piege"><span class="num">9</span><div>Somme des degres = 2 &times; nombre d'aretes (toujours pair !)</div></div>
   <div class="piege"><span class="num">10</span><div>Generateur epuise : <code>list(g)</code> 2e fois &rarr; <code>[]</code></div></div>
@@ -111,15 +111,15 @@ const modulesOld = [
   {id:6,icon:"\ud83c\udf00",title:"Recursivite",tags:"memo \u00b7 D&C \u00b7 Hanoi \u00b7 tri",file:"module6-recursivite.html",cours:"cours6-recursivite.html",key:"ap2_mod6_state",total:18},
   {id:7,icon:"\u267b\ufe0f",title:"Generateurs",tags:"yield \u00b7 itertools \u00b7 expressions",file:"module7-generateurs.html",cours:"cours7-generateurs.html",key:"ap2_mod7_state",total:18}
 ];
-const modulesNew = [
+const modulesCh3 = [
   {id:8,icon:"\ud83d\udce5",title:"Files & Piles",tags:"FIFO \u00b7 LIFO \u00b7 stack \u00b7 queue",file:"module8-files-piles.html",cours:"cours8-files-piles.html",key:"ap2_mod8_state",total:15,isNew:true},
   {id:9,icon:"\ud83c\udf33",title:"Arbres",tags:"DFS \u00b7 BFS \u00b7 BST \u00b7 parcours",file:"module9-arbres.html",cours:"cours9-arbres.html",key:"ap2_mod9_state",total:18,isNew:true},
   {id:10,icon:"\ud83d\udd78\ufe0f",title:"Graphes",tags:"DFS \u00b7 BFS \u00b7 Euler \u00b7 adjacence",file:"module10-graphes.html",cours:"cours10-graphes.html",key:"ap2_mod10_state",total:20,isNew:true}
 ];
 const modulesCh4 = [
-  {id:11,icon:"\ud83c\udfdb\ufe0f",title:"Classes & Objets",tags:"class \u00b7 self \u00b7 surcharge \u00b7 encapsulation",file:"module11-classes-objets.html",key:"ap2_mod11_state",total:30,isNew:true}
+  {id:11,icon:"\ud83e\udde9",title:"Classes & Objets",tags:"class \u00b7 self \u00b7 __init__ \u00b7 surcharge",file:"module11-classes.html",cours:"cours11-classes.html",key:"ap2_mod11_state",total:20,isNew:true}
 ];
-const allModules = [...modulesOld, ...modulesNew, ...modulesCh4];
+const allModules = [...modulesOld, ...modulesCh3, ...modulesCh4];
 
 function getModState(key){
   try{const s=localStorage.getItem(key);if(s)return JSON.parse(s)}catch(e){}
@@ -128,10 +128,10 @@ function getModState(key){
 
 function renderModules(){
   const gridOld = document.getElementById("gridOld");
-  const gridNew = document.getElementById("gridNew");
+  const gridCh3 = document.getElementById("gridCh3");
   const gridCh4 = document.getElementById("gridCh4");
   gridOld.innerHTML = "";
-  gridNew.innerHTML = "";
+  gridCh3.innerHTML = "";
   gridCh4.innerHTML = "";
   let gRight=0,gWrong=0,gDone=0,gTotal=0;
 
@@ -160,7 +160,7 @@ function renderModules(){
   }
 
   modulesOld.forEach(m=>makeCard(m, gridOld));
-  modulesNew.forEach(m=>makeCard(m, gridNew));
+  modulesCh3.forEach(m=>makeCard(m, gridCh3));
   modulesCh4.forEach(m=>makeCard(m, gridCh4));
 
   document.getElementById("totalRight").textContent = gRight;
